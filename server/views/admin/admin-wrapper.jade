@@ -32,8 +32,9 @@ html(lang="en")
           a.navbar-brand(href='/admin') Digitopia Admin (module)
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav
-            li
-              a(href="/admin/views/MyUser/index") MyUsers
+            for table in menu
+              li
+                a(href="/admin/views/'+table+'/index") Table
           .hidden-logged-in
             form.navbar-form.navbar-right(data-jsclass="adminLoginController")
               .form-group
