@@ -34,7 +34,7 @@ html(lang="en")
           ul.nav.navbar-nav
             for table in menu
               li
-                a(href="/admin/views/'+table+'/index") Table
+                a(href='/admin/views/'+table+'/index')= table
           .hidden-logged-in
             form.navbar-form.navbar-right(data-jsclass="adminLoginController")
               .form-group
