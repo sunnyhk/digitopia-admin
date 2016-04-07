@@ -14,6 +14,10 @@
     "jquery-serializejson": "^2.6.2",
     "npm-modernizr": "^2.8.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mediapolis/digitopia-admin.git"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^1.0.0",
