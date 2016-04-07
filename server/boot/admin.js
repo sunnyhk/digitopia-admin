@@ -3,13 +3,14 @@ var jade = require('jade');
 var path = require('path');
 var extend = require('util')._extend;
 
-module.exports = function (server, userAuth, tableNames) {
+module.exports = function (server, userAuth, userModelName, tableNames) {
 	var router = server.loopback.Router();
 
 	function render(template, locals, next) {
 		if (!locals) {
 			locals = {};
 		}
+		locals.userModel = userModelName;
 		locals.menu = tableNames;
 		var templatePath = path.join(__dirname, '../views/', template);
 		var fn = jade.compileFile(templatePath, {

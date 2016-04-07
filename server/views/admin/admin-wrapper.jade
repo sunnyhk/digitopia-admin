@@ -36,7 +36,7 @@ html(lang="en")
               li
                 a(href='/admin/views/'+table+'/index')= table
           .hidden-logged-in
-            form.navbar-form.navbar-right(data-jsclass="adminLoginController")
+            form.navbar-form.navbar-right(data-jsclass="adminLoginController" data-endpoint= '/api/' + userModel + '/login')
               .form-group
                 input.form-control(name="email" type='text', placeholder='Email')
               .form-group
@@ -44,7 +44,7 @@ html(lang="en")
               button.btn.btn-success(type='submit') Sign in
           .hidden-logged-out
             .navbar-form.navbar-right
-              button.btn.btn-default(data-jsclass="adminLogoutController") Log Out
+              button.btn.btn-default(data-jsclass="adminLogoutController"  data-endpoint= '/api/' + userModel + '/logout') Log Out
               
     #admin-content.container-fluid(data-hijax="true")
       block content

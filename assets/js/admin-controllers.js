@@ -113,10 +113,13 @@
 		this.element = $(elem);
 
 		var self = this;
+
+		this.endpoint = this.element.data('endpoint');
+
 		this.start = function () {
 			this.element.on('submit', function (e) {
 				e.preventDefault();
-				$.post('/api/MyUsers/login', {
+				$.post(self.endpoint, {
 						'email': self.element.find('[name="email"]').val(),
 						'password': self.element.find('[name="password"]').val()
 					})
@@ -141,10 +144,11 @@
 	function adminLogoutController(elem, options) {
 		this.element = $(elem);
 		var self = this;
+		this.endpoint = this.element.data('endpoint');
 		this.start = function () {
 			this.element.on('click', function (e) {
 				e.preventDefault();
-				$.post('/api/MyUsers/logout')
+				$.post(self.endpoint)
 					.done(function () {
 						loadPage('/admin?logout');
 						didLogOut();
