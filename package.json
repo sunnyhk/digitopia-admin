@@ -1,0 +1,32 @@
+{
+  "name": "digitopia-admin",
+  "version": "0.0.1",
+  "description": "Loopback Site Admin Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Rhodes <mrhodes@mediapolis.com> (http://blog.digitopia.com)",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^1.5.2",
+    "jade": "^1.11.0",
+    "jquery-serializejson": "^2.6.2",
+    "npm-modernizr": "^2.8.3"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-less": "^1.2.0",
+    "grunt-contrib-stylus": "^1.0.0",
+    "grunt-contrib-uglify": "^0.11.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-postcss": "^0.7.2",
+    "digitopia": "git+https://github.com/mediapolis/digitopia.git",
+    "bootstrap": "^3.3.6",
+    "lodash": "^4.7.0",
+    "jquery": "^2.2.1"
+  }
+}
