@@ -72,6 +72,7 @@ block content
 													- var endpoint = helper.endpoint
 													- var property = helper.property
 													- var photo = getUploadForProperty(property,instance.uploads(),null,true)
+													- endpoint = endpoint.replace(':id', instance.id)
 													.upload-viewport.text-center(data-jsclass="digitopiaViewport" data-crop="false" data-blowup="false")
 														img(data-jsclass="digitopiaLazyImg" data-lazy-src= photo.url)
 														.dropzone(data-jsclass="dropzoneController" data-endpoint= endpoint)
