@@ -28,14 +28,17 @@ block content
 												a(href= parent.url)= parent.description
 								
 								- var properties = mode === 'view' ? schema.admin.viewProperties : schema.admin.editProperties
+
 								for property in properties
 									.form-group
 										label.col-sm-3.control-label(for= property)
 											= property
 										.col-sm-9
+											- var dataType = schema.properties[property].type;
 											- var type = schema.properties[property].admin.inputType
 											- var options = schema.properties[property].admin.options
-											- var dataType = schema.properties[property].type;
+											- var multiple = schema.properties[property].admin.multiple
+											- var readonly = schema.properties[property].admin.readonly
 											- var val = instance[property]
 											
 											if query[property]
@@ -56,6 +59,9 @@ block content
 												else if type === 'checkbox'
 													.input-margins
 														input(type= type name= property value= "true" checked= val)
+												else if options
+													for option in options
+														input(type= multiple ? "checkbox" : "radio" name= property value= options)= val
 												else
 													if query[property] || property === 'id'
 														input.form-control(type= type name= property value= val readonly)

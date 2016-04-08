@@ -241,10 +241,13 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				}
 				else {
 					if (properties[key].type instanceof Array) {
-						result[key]['type'] = 'Array';
+						result[key].type = 'Array';
+					}
+					else if (properties[key].type instanceof Object) {
+						result[key].type = 'Object';
 					}
 					else {
-						result[key]['type'] = properties[key].type.name;
+						result[key].type = properties[key].type.name;
 					}
 				}
 			}
@@ -262,7 +265,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 			properties: formatProperties(model.definition.properties)
 		};
 
-		var keys = ['description', 'plural', 'strict', 'hidden', 'validations', 'methods', 'mixins', 'admin'];
+		var keys = ['description', 'plural', 'strict', 'hidden', 'admin'];
 
 		keys.forEach(function (key) {
 			result[key] = clone(_.get(model.definition.settings, key));
@@ -324,12 +327,13 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				result.admin.listProperties.push(prop);
 			}
 
-			if (populateEdit) {
-				result.admin.editProperties.push(prop);
-			}
-
 			if (populateView) {
 				result.admin.viewProperties.push(prop);
+			}
+			if (prop !== 'id') {
+				if (populateEdit) {
+					result.admin.editProperties.push(prop);
+				}
 			}
 		}
 
