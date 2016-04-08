@@ -240,14 +240,14 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 					result[key][prop] = properties[key][prop];
 				}
 				else {
-					if (properties[key].type instanceof Array) {
+					if (properties[key].type.name) {
+						result[key].type = properties[key].type.name;
+					}
+					else if (properties[key].type instanceof Array) {
 						result[key].type = 'Array';
 					}
 					else if (properties[key].type instanceof Object) {
 						result[key].type = 'Object';
-					}
-					else {
-						result[key].type = properties[key].type.name;
 					}
 				}
 			}
