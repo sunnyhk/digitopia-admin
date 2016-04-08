@@ -146,7 +146,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 					var relation = parentRelations[i];
 					var related = theInstance[relation.name]();
 					if (related) {
-						var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.model;
+						var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
 						var relatedSchema = getModelInfo(relatedModel);
 						parents.push({
 							name: relation.name,
