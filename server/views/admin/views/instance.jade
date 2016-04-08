@@ -31,7 +31,7 @@ block content
 
 								for property in properties
 									.form-group
-										label.col-sm-3.control-label(for= property)
+										label.col-sm-3.control-label
 											= property
 										.col-sm-9
 											- var dataType = schema.properties[property].type;
@@ -40,12 +40,16 @@ block content
 											- var multiple = schema.properties[property].admin.multiple
 											- var readonly = schema.properties[property].admin.readonly
 											- var val = instance[property]
+											- var encode = ''
 											
 											if query[property]
 												- val = query[property]
 												
-											if (dataType === 'Object' || dataType === 'Array' ) && val
-												- val = JSON.stringify(val,null,2)
+											if (type === 'textarea' && (dataType === 'Object' || dataType === 'Array' ))
+												- encode = 'json'
+
+												if val
+													- val = JSON.stringify(val,null,2)
 												
 											if mode === 'view'
 												.input-margins
@@ -54,19 +58,29 @@ block content
 													else
 														= val
 											else
-												if type === 'textarea'
-													textarea.form-control(name= property)= val
+												if options
+													for option in options
+														- var checked = false
+														if multiple
+															- checked= !val || val.indexOf(option) === -1 ? false : true
+														else
+															- checked= val === option
+														
+														div(class= multiple ? "checkbox" : "radio")
+															label
+																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property value= option checked= checked)
+																= ' ' + option
+												else if type === 'textarea'
+													textarea.form-control(name= property data-datatype= dataType data-encode= encode)= val
 												else if type === 'checkbox'
 													.input-margins
-														input(type= type name= property value= "true" checked= val)
-												else if options
-													for option in options
-														input(type= multiple ? "checkbox" : "radio" name= property value= options)= val
+														input(type= type data-datatype= dataType data-encode= encode name= property value= "true" checked= val)
+
 												else
 													if query[property] || property === 'id'
-														input.form-control(type= type name= property value= val readonly)
+														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val readonly)
 													else
-														input.form-control(type= type name= property value= val)
+														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val)
 
 								if mode === 'view'
 									for helper in schema.admin.helpers

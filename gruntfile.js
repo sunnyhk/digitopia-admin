@@ -13,7 +13,6 @@ module.exports = function (grunt) {
 		'node_modules/jquery/dist/jquery.js',
 		'node_modules/bootstrap/dist/js/bootstrap.js',
 		'node_modules/digitopia/dist/js/digitopia.js',
-		'node_modules/jquery-serializejson/jquery.serializejson.js',
 		'assets/vendor/*.js',
 		'assets/js/*.js'
 	];

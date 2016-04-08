@@ -81,9 +81,33 @@
 		};
 
 		this.save = function () {
-			var form = self.element.find('input,textarea,select').serializeJSON({
-				checkboxUncheckedValue: 'false',
-				parseBooleans: true
+			var form = {};
+
+			self.element.find('input,textarea,select').each(function () {
+				var name = $(this).attr('name');
+				var val = $(this).val();
+				var datatype = $(this).data('datatype');
+				var encode = $(this).data('encode');
+
+				if ($(this).attr('type') !== 'checkbox' || $(this).is(':checked')) {
+					if (encode === 'json') {
+						if (val) {
+							form[name] = JSON.parse(val);
+						}
+						else {
+							form[name] = '';
+						}
+					}
+					else if (datatype === 'Array') {
+						if (!(name in form)) {
+							form[name] = [];
+						}
+						form[name].push(val);
+					}
+					else {
+						form[name] = val;
+					}
+				}
 			});
 
 			var method = self.settings.mode === 'edit' ? 'put' : 'post';
