@@ -163,8 +163,9 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 					var related = theInstance[relation.name]();
 
 					// compute url if child does not exist or hasMany
+					var createChild;
 					if (relation.multiple || !related) {
-						var createChild = '/admin/views/' + relation.modelTo + '/add?' + relation.keyTo + '=' + id;
+						createChild = '/admin/views/' + relation.modelTo + '/add?' + relation.keyTo + '=' + id;
 						if (relation.polymorphic) {
 							createChild += '&' + relation.polymorphic.discriminator + '=' + model;
 						}
