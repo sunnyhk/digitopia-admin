@@ -302,7 +302,9 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 
 		for (var prop in result.properties) {
 
-			result.properties[prop].admin = {};
+			if (!result.properties[prop].admin) {
+				result.properties[prop].admin = {};
+			}
 
 			var type = result.properties[prop].type;
 			if (type === 'Boolean') {
