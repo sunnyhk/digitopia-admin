@@ -96,28 +96,41 @@
 				var val = $(this).val() ? $(this).val() : null;
 				var datatype = $(this).data('datatype');
 				var encode = $(this).data('encode');
+				var skip = $(this).data('skip');
 
-				if (datatype === 'Date') {
-					val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
-				}
+				if (!skip) {
 
-				if ($(this).attr('type') !== 'checkbox' || $(this).is(':checked')) {
-					if (encode === 'json') {
-						if (val) {
-							form[name] = JSON.parse(val);
+					if (datatype === 'date') {
+						val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
+					}
+
+					if (datatype === 'datetime') {
+						var sel = '[name="' + name + '-time"]';
+						var timePart = self.element.find(sel).val();
+						if (timePart) {
+							val += '-' + timePart;
+							val = moment.utc(val, 'YYYY-MM-DD-hh:mm').format('YYYY-MM-DDThh:mm');
+						}
+					}
+
+					if ($(this).attr('type') !== 'checkbox' || $(this).is(':checked')) {
+						if (encode === 'json') {
+							if (val) {
+								form[name] = JSON.parse(val);
+							}
+							else {
+								form[name] = null;
+							}
+						}
+						else if (datatype === 'array') {
+							if (!(name in form)) {
+								form[name] = [];
+							}
+							form[name].push(val);
 						}
 						else {
-							form[name] = null;
+							form[name] = val;
 						}
-					}
-					else if (datatype === 'Array') {
-						if (!(name in form)) {
-							form[name] = [];
-						}
-						form[name].push(val);
-					}
-					else {
-						form[name] = val;
 					}
 				}
 			});

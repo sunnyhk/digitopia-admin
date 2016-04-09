@@ -318,12 +318,31 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				result.properties[prop].admin = {};
 			}
 
+			if (!result.properties[prop].admin.validate) {
+				result.properties[prop].admin.validate = {};
+			}
+
+			// map loopback required,length to admin.validate properties
+
+			if (result.properties[prop].required) {
+				result.properties[prop].admin.validate['required'] = true;
+			}
+
+			if (result.properties[prop].length) {
+				result.properties[prop].admin.validate['max-length'] = length;
+			}
+
+
 			var type = result.properties[prop].type;
+
 			if (type === 'Boolean') {
 				type = 'checkbox';
 			}
 			if (type === 'String') {
 				type = 'text';
+			}
+			if (type === 'Number') {
+				type = 'number';
 			}
 			if (type === 'Object') {
 				type = 'textarea';
@@ -335,7 +354,9 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				type = 'date';
 			}
 
-			result.properties[prop].admin.inputType = type;
+			if (!result.properties[prop].admin.inputType) {
+				result.properties[prop].admin.inputType = type;
+			}
 
 			if (populateList) {
 				result.admin.listProperties.push(prop);
@@ -344,11 +365,13 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 			if (populateView) {
 				result.admin.viewProperties.push(prop);
 			}
+
 			if (prop !== 'id') {
 				if (populateEdit) {
 					result.admin.editProperties.push(prop);
 				}
 			}
+
 		}
 
 		return result;

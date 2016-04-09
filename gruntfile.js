@@ -12,7 +12,10 @@ module.exports = function (grunt) {
 		'node_modules/npm-modernizr/modernizr.js',
 		'node_modules/jquery/dist/jquery.js',
 		'node_modules/bootstrap/dist/js/bootstrap.js',
+		'node_modules/jquery.payment/lib/jquery.payment.js',
 		'node_modules/moment/moment.js',
+		'node_modules/async/dist/async.js',
+		'node_modules/validate.js/validate.js',
 		'node_modules/digitopia/dist/js/digitopia.js',
 		'assets/vendor/*.js',
 		'assets/js/*.js'

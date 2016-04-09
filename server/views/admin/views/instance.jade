@@ -18,12 +18,12 @@ block content
 							i.list-button.fa.fa-list.fa-2x
 							!= ' Editing <strong>' + model + '</strong> row <strong>' + instance.id + '</strong>'
 						.panel-body
-							form.form.form-horizontal(method="POST" action= endpoint)
+							form.form.form-horizontal(method="POST" action= endpoint data-jsclass="formValidationController" data-submitter=".save-button")
 								for parent in parents
 									.form-group
-										label.col-sm-3.control-label
+										label.col-sm-2.control-label
 											= parent.name
-										.col-sm-9
+										.col-sm-10
 											.input-margins
 												a(href= parent.url)= parent.description
 								
@@ -31,27 +31,37 @@ block content
 
 								for property in properties
 									.form-group
-										label.col-sm-3.control-label
+										label.col-sm-2.control-label
 											= property
-										.col-sm-9
-											- var dataType = schema.properties[property].type;
-											- var type = schema.properties[property].admin.inputType
+										.col-sm-10.position-relative
+											- var dataType = schema.properties[property].type.toLowerCase()
+											- var type = schema.properties[property].admin.inputType.toLowerCase()
 											- var options = schema.properties[property].admin.options
 											- var multiple = schema.properties[property].admin.multiple
 											- var readonly = schema.properties[property].admin.readonly
 											- var val = instance[property]
 											- var encode = ''
-											
-											if val && dataType === 'Date'
+											- var validations = [];
+											for validation,i in schema.properties[property].admin.validate
+												- validations.push(i + '=' + validation);
+
+											if val && type === 'date'
 												if mode === 'edit'
 													- val = moment.utc(instance[property]).format('YYYY-MM-DD')
 												else
 													- val = moment.utc(instance[property]).format('MM/DD/YYYY')
 
+											if val && type === 'datetime'
+												- var utc = instance[property].toISOString().replace(/Z$/,'');
+												if mode === 'edit'
+													- val = moment.utc(utc).format('YYYY-MM-DD hh:mm:ss.SSS')
+												else
+													- val = moment.utc(utc).format('MM/DD/YYYY hh:mm:ss.SSS')
+
 											if query[property]
 												- val = query[property]
 												
-											if (type === 'textarea' && (dataType === 'Object' || dataType === 'Array' ))
+											if (type === 'textarea' && (dataType === 'object' || dataType === 'array' ))
 												- encode = 'json'
 
 												if val
@@ -59,7 +69,7 @@ block content
 												
 											if mode === 'view'
 												.input-margins
-													if dataType === 'Object' && val
+													if dataType === 'object' && val
 														pre= val
 													else
 														= val
@@ -81,19 +91,28 @@ block content
 												else if type === 'checkbox'
 													.input-margins
 														input(type= type data-datatype= dataType data-encode= encode name= property value= "true" checked= val)
-
+												else if type === 'datetime'
+														- var dt = val ? val.split(' ') : [null,null]
+														.row
+															.col-xs-6
+																input.form-control(type= 'date' data-datatype= type data-encode= encode name= property value= dt[0])
+															.col-xs-6
+																input.form-control(type= 'time' data-datatype= type data-encode= encode data-skip= true name= property+'-time' value= dt[1])
 												else
 													if query[property] || property === 'id'
 														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val readonly)
 													else
-														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val)
-
+														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val data-validate= validations.join(','))
+												.cc-brand
+												.input-ok-indicator
+													span.glyphicon.glyphicon-ok
+												.validation-help
 								if mode === 'view'
 									for helper in schema.admin.helpers
 										.form-group
-											label.col-sm-3.control-label
+											label.col-sm-2.control-label
 												= helper.name
-											.col-sm-9
+											.col-sm-10
 												if helper.type === 'upload'
 													- var endpoint = helper.endpoint
 													- var property = helper.property
@@ -107,13 +126,13 @@ block content
 										
 									for relationship in children
 										.form-group
-											label.col-sm-3.control-label
+											label.col-sm-2.control-label
 												= relationship.relation.name
 												if relationship.createUrl
 													| &nbsp;
 													a.fa.fa-plus.fa-2(href= relationship.createUrl)
 														
-											.col-sm-9
+											.col-sm-10
 												.input-margins
 													for child in relationship.children
 														.related-instance
@@ -122,6 +141,6 @@ block content
 													
 								if mode !== 'view'
 									.form-group
-										.col-sm-3
-										.col-sm-9
-											.btn.btn-primary.save-button(data-id= instance.id) Save
+										.col-sm-2
+										.col-sm-10
+											button.btn.btn-primary.save-button(data-id= instance.id) Save
