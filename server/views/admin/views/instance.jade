@@ -42,6 +42,12 @@ block content
 											- var val = instance[property]
 											- var encode = ''
 											
+											if val && dataType === 'Date'
+												if mode === 'edit'
+													- val = moment.utc(instance[property]).format('YYYY-MM-DD')
+												else
+													- val = moment.utc(instance[property]).format('MM/DD/YYYY')
+
 											if query[property]
 												- val = query[property]
 												

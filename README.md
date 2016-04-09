@@ -35,3 +35,53 @@ module.exports = function (server) {
 	adminBoot(server, userAuth, 'MyUsers', ['MyUser', 'ImageSet']);
 };
 ```
+
+###Model Configuration
+"admin" properties define /admin behavior for models
+
+[example MyUser](https://github.com/mediapolis/digitopia-example/blob/master/common/models/MyUser.json)
+
+[example Loopback Types](https://github.com/mediapolis/digitopia-example/blob/master/common/models/type-test.json)
+
+```
+...,
+"admin": {
+  "defaultProperty": "email", // property to display in relation links
+  "listProperties": [], // list of properties on list view
+	"viewProperties": [], // list of properties on instance view
+  "editProperties": []  // list of properties on edit view
+}
+
+// in property definition
+"propertyname":{
+	"type":"string",
+	"admin":{
+		"inputType": "textarea"
+	}
+}
+
+// special property behavior choose value from set
+"chooseOneExample": { // will edit as radio
+  "type": "string",
+  "admin": {
+    "options": ["one", "two", "three"]
+  }
+},
+"chooseMultipleExample": { // will edit as checkboxes
+  "type": ["string"],
+  "admin": {
+    "options": ["one", "two", "three"],
+    "multiple": true
+  }
+}
+...
+
+define acl to allow model access to "admin" role
+{
+  "accessType": "*",
+  "principalType": "ROLE",
+  "principalId": "admin",
+  "permission": "ALLOW",
+  "property": "*"
+}
+```

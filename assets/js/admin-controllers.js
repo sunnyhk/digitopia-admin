@@ -12,6 +12,8 @@
 		}, options || {});
 
 		this.start = function () {
+			this.setUpInputBehavior();
+
 			this.element.on('click', '.list-button', function (e) {
 				e.preventDefault();
 				loadPage('/admin/views/' + self.settings.model + '/index')
@@ -67,6 +69,12 @@
 			this.element.off('click', '.instance-select');
 		};
 
+		this.setUpInputBehavior = function () {
+			self.element.find('input,textarea,select').each(function () {
+
+			});
+		};
+
 		this.delete = function () {
 			$.ajax({
 					method: 'delete',
@@ -85,9 +93,13 @@
 
 			self.element.find('input,textarea,select').each(function () {
 				var name = $(this).attr('name');
-				var val = $(this).val();
+				var val = $(this).val() ? $(this).val() : null;
 				var datatype = $(this).data('datatype');
 				var encode = $(this).data('encode');
+
+				if (datatype === 'Date') {
+					val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
+				}
 
 				if ($(this).attr('type') !== 'checkbox' || $(this).is(':checked')) {
 					if (encode === 'json') {
@@ -95,7 +107,7 @@
 							form[name] = JSON.parse(val);
 						}
 						else {
-							form[name] = '';
+							form[name] = null;
 						}
 					}
 					else if (datatype === 'Array') {
@@ -117,7 +129,9 @@
 			$.ajax({
 					method: method,
 					url: self.settings.endpoint,
-					data: form
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: JSON.stringify(form)
 				}).done(function (data) {
 					loadPage('/admin/views/' + self.settings.model + '/' + data.id + '/view');
 				})

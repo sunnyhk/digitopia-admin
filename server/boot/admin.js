@@ -2,6 +2,7 @@ var async = require('async');
 var jade = require('jade');
 var path = require('path');
 var extend = require('util')._extend;
+var _ = require('lodash');
 
 module.exports = function (server, userAuth, userModelName, tableNames) {
 	var router = server.loopback.Router();
@@ -107,16 +108,18 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 		}
 
 		for (var relation in schema.relations) {
-			if (schema.relations[relation].type === 'hasMany' || schema.relations[relation].type === 'hasOne') {
-				var rel = schema.relations[relation];
-				childRelations.push(rel);
-				includes.push(relation);
-			}
+			if (!schema.admin.includeRelations || schema.admin.includeRelations.indexOf(relation) != -1) {
+				if (schema.relations[relation].type === 'hasMany' || schema.relations[relation].type === 'hasOne') {
+					var rel = schema.relations[relation];
+					childRelations.push(rel);
+					includes.push(relation);
+				}
 
-			if (schema.relations[relation].type === 'belongsTo') {
-				var rel = schema.relations[relation];
-				parentRelations.push(rel);
-				includes.push(relation);
+				if (schema.relations[relation].type === 'belongsTo') {
+					var rel = schema.relations[relation];
+					parentRelations.push(rel);
+					includes.push(relation);
+				}
 			}
 		}
 
@@ -160,11 +163,17 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 
 				for (var i in childRelations) {
 					var relation = childRelations[i];
-					var related = theInstance[relation.name]();
+					var related = undefined;
+					if (relation.type === 'hasOne') {
+						related = [theInstance[relation.name]()];
+					}
+					else {
+						related = theInstance[relation.name]();
+					}
 
 					// compute url if child does not exist or hasMany
-					var createChild;
-					if (relation.multiple || !related) {
+					var createChild = "";
+					if (relation.multiple || !related || !related.length) {
 						createChild = '/admin/views/' + relation.modelTo + '/add?' + relation.keyTo + '=' + id;
 						if (relation.polymorphic) {
 							createChild += '&' + relation.polymorphic.discriminator + '=' + model;
@@ -321,7 +330,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				type = 'textarea';
 			}
 			if (type === 'Date') {
-				type = 'text';
+				type = 'date';
 			}
 
 			result.properties[prop].admin.inputType = type;
