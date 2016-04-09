@@ -165,7 +165,9 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 					var relation = childRelations[i];
 					var related = undefined;
 					if (relation.type === 'hasOne') {
-						related = [theInstance[relation.name]()];
+						if (theInstance[relation.name]()) {
+							related = [theInstance[relation.name]()];
+						}
 					}
 					else {
 						related = theInstance[relation.name]();
