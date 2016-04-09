@@ -91,7 +91,7 @@ enable client side validation as needed on a property
 "someProperty": {
 	type: 'xxx',
 	admin:{
-		validation: {
+		validate: {
 			required:true,
 			integer:true,
 			float:true,
