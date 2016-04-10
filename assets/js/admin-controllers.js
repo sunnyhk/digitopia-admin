@@ -42,6 +42,14 @@
 				}
 			});
 
+			$(this.element.find('.delete-relation-button')).confirmation({
+				placement: 'left',
+				'onConfirm': function (event, element) {
+					self.element.find('form').find('.parent-relation').empty();
+					self.element.find('form').find('input[name="' + $(element).data('foreign-key') + '"]').val('');
+				}
+			});
+
 			this.element.on('click', '.search-button', function (e) {
 				e.preventDefault();
 				var q = self.element.find('[name="q"]').val();

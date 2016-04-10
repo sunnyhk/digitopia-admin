@@ -148,17 +148,18 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				for (var i in parentRelations) {
 					var relation = parentRelations[i];
 					var related = theInstance[relation.name]();
-					if (related) {
-						var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
-						var relatedSchema = getModelInfo(relatedModel);
-						parents.push({
-							name: relation.name,
-							model: relatedModel,
-							type: relation.type,
-							url: '/admin/views/' + relatedModel + '/' + related.id + '/view',
-							description: related[relatedSchema.admin.defaultProperty]
-						});
-					}
+					var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
+					var relatedSchema = getModelInfo(relatedModel);
+					parents.push({
+						name: relation.name,
+						model: relatedModel,
+						type: relation.type,
+						foreignKey: relation.keyFrom,
+						lookupProperty: relatedSchema.admin.defaultProperty,
+						lookupEndpoint: '/api/' + relatedModel + 's/',
+						url: related ? '/admin/views/' + relatedModel + '/' + related.id + '/view' : null,
+						description: related ? related[relatedSchema.admin.defaultProperty] : null
+					});
 				}
 
 				for (var i in childRelations) {
@@ -329,7 +330,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 			}
 
 			if (result.properties[prop].length) {
-				result.properties[prop].admin.validate['max-length'] = length;
+				result.properties[prop].admin.validate['max-length'] = result.properties[prop].length;
 			}
 
 

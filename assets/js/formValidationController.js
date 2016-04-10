@@ -137,7 +137,7 @@
 						}
 					}
 
-					if (validation[0] === 'url') {
+					if (validation[0] === 'url' && val) {
 						var test = {
 							'website': {
 								'url': {
@@ -155,7 +155,7 @@
 						}
 					}
 
-					if (validation[0] === 'email') {
+					if (validation[0] === 'email' && val) {
 						var test = {
 							'from': {
 								'email': val
@@ -171,13 +171,13 @@
 						}
 					}
 
-					if (validation[0] === 'password') {
+					if (validation[0] === 'password' && val) {
 						if (val && !(val.match(/[0-9]+/) && val.match(/[A-Za-z]+/))) {
 							errors.push('must contain at least one number, one letter');
 						}
 					}
 
-					if (validation[0] === 'cc-number') {
+					if (validation[0] === 'cc-number' && val) {
 						var cardType = $.payment.cardType(val);
 						input.closest('.form-group').find('.cc-brand').empty();
 						if (cardType) {
@@ -190,14 +190,14 @@
 						}
 					}
 
-					if (validation[0] === 'cc-exp') {
+					if (validation[0] === 'cc-exp' && val) {
 						var isvalid = $.payment.validateCardExpiry($(input).payment('cardExpiryVal'));
 						if (!isvalid) {
 							errors.push('must be a valid expire date');
 						}
 					}
 
-					if (validation[0] === 'cc-cvc') {
+					if (validation[0] === 'cc-cvc' && val) {
 						var cardnum = $(input.data('card-field')).val();
 						var cardType = $.payment.cardType(cardnum);
 						var isvalid = $.payment.validateCardCVC(val, cardType);
@@ -206,7 +206,7 @@
 						}
 					}
 
-					if (input.val() && validation[0] === 'mask') {
+					if (validation[0] === 'mask' && val) {
 						var re = new RegExp(validation[1]);
 						if (!re.exec(input.val())) {
 							errors.push('invalid characters');

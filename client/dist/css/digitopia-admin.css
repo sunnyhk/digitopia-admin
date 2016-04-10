@@ -7223,9 +7223,13 @@ body {
   position: relative;
 }
 input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
 input[type="password"],
 input[type="tel"],
-select {
+select,
+textarea {
   padding-right: 30px;
   opacity: 0.5;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
@@ -7247,13 +7251,20 @@ select {
   transition-timing-function: ease;
 }
 input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus,
 input[type="password"]:focus,
 input[type="tel"]:focus,
-select:focus {
+select:focus,
+textarea:focus {
   opacity: 1;
   -ms-filter: none;
   filter: none;
   background-position: 0 0;
+}
+textarea {
+  min-height: 200px;
 }
 .input-ok-indicator {
   opacity: 0;
@@ -7280,9 +7291,13 @@ select:focus {
   transition-timing-function: ease;
 }
 .input-ok input[type="text"],
+.input-ok input[type="date"],
+.input-ok input[type="time"],
+.input-ok input[type="number"],
 .input-ok input[type="password"],
 .input-ok input[type="tel"],
-.input-ok select {
+.input-ok select,
+.input-ok textarea {
   opacity: 1;
   -ms-filter: none;
   filter: none;
@@ -7362,4 +7377,7 @@ select:focus {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
   pointer-events: none;
+}
+.parent-relation i {
+  margin-left: 15px;
 }

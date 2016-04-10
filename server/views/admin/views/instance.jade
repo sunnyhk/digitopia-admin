@@ -23,17 +23,25 @@ block content
 									.form-group
 										label.col-sm-2.control-label
 											= parent.name
-										.col-sm-10
-											.input-margins
-												a(href= parent.url)= parent.description
-								
+										.col-sm-9
+											.row
+												.col-sm-6
+													.parent-relation.input-margins
+														if parent.description
+															a(href= parent.url)= parent.description
+															if mode === 'edit'
+																i.delete-relation-button.fa.fa-times-circle.fa(data-foreign-key= parent.foreignKey)
+												.col-sm-6
+													if mode === 'edit'
+														input.form-control(type="text" placeholder="Lookup in " + parent.model data-jsclass="lookupController" data-lookup-endpoint= parent.lookupEndpoint data-lookup-property= parent.lookupProperty data-foreign-key= parent.foreignKey)
+														
 								- var properties = mode === 'view' ? schema.admin.viewProperties : schema.admin.editProperties
 
 								for property in properties
 									.form-group
 										label.col-sm-2.control-label
 											= property
-										.col-sm-10.position-relative
+										.col-sm-9.position-relative
 											- var dataType = schema.properties[property].type.toLowerCase()
 											- var type = schema.properties[property].admin.inputType.toLowerCase()
 											- var options = schema.properties[property].admin.options
@@ -112,7 +120,7 @@ block content
 										.form-group
 											label.col-sm-2.control-label
 												= helper.name
-											.col-sm-10
+											.col-sm-9
 												if helper.type === 'upload'
 													- var endpoint = helper.endpoint
 													- var property = helper.property
@@ -132,7 +140,7 @@ block content
 													| &nbsp;
 													a.fa.fa-plus.fa-2(href= relationship.createUrl)
 														
-											.col-sm-10
+											.col-sm-9
 												.input-margins
 													for child in relationship.children
 														.related-instance

@@ -24486,6 +24486,14 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			});
 
+			$(this.element.find('.delete-relation-button')).confirmation({
+				placement: 'left',
+				'onConfirm': function (event, element) {
+					self.element.find('form').find('.parent-relation').empty();
+					self.element.find('form').find('input[name="' + $(element).data('foreign-key') + '"]').val('');
+				}
+			});
+
 			this.element.on('click', '.search-button', function (e) {
 				e.preventDefault();
 				var q = self.element.find('[name="q"]').val();
@@ -24863,7 +24871,7 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if (validation[0] === 'url') {
+					if (validation[0] === 'url' && val) {
 						var test = {
 							'website': {
 								'url': {
@@ -24881,7 +24889,7 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if (validation[0] === 'email') {
+					if (validation[0] === 'email' && val) {
 						var test = {
 							'from': {
 								'email': val
@@ -24897,13 +24905,13 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if (validation[0] === 'password') {
+					if (validation[0] === 'password' && val) {
 						if (val && !(val.match(/[0-9]+/) && val.match(/[A-Za-z]+/))) {
 							errors.push('must contain at least one number, one letter');
 						}
 					}
 
-					if (validation[0] === 'cc-number') {
+					if (validation[0] === 'cc-number' && val) {
 						var cardType = $.payment.cardType(val);
 						input.closest('.form-group').find('.cc-brand').empty();
 						if (cardType) {
@@ -24916,14 +24924,14 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if (validation[0] === 'cc-exp') {
+					if (validation[0] === 'cc-exp' && val) {
 						var isvalid = $.payment.validateCardExpiry($(input).payment('cardExpiryVal'));
 						if (!isvalid) {
 							errors.push('must be a valid expire date');
 						}
 					}
 
-					if (validation[0] === 'cc-cvc') {
+					if (validation[0] === 'cc-cvc' && val) {
 						var cardnum = $(input.data('card-field')).val();
 						var cardType = $.payment.cardType(cardnum);
 						var isvalid = $.payment.validateCardCVC(val, cardType);
@@ -24932,7 +24940,7 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if (input.val() && validation[0] === 'mask') {
+					if (validation[0] === 'mask' && val) {
 						var re = new RegExp(validation[1]);
 						if (!re.exec(input.val())) {
 							errors.push('invalid characters');
@@ -25108,3 +25116,9 @@ function flashAjaxStatus(level, message) {
 		$('#ajax-status').empty();
 	}, 4000);
 }
+;(function ($) {
+	function lookupController(elem, options) {
+		this.element = $(elem);
+	}
+	$.fn.lookupController = GetJQueryPlugin('lookupController', lookupController);
+})(jQuery);

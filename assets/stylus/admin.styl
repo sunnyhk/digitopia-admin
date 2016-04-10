@@ -62,7 +62,7 @@ body
 .position-relative
 		position:relative
 
-input[type="text"], input[type="password"], input[type="tel"], select
+input[type="text"],input[type="date"],input[type="time"],input[type="number"], input[type="password"], input[type="tel"], select, textarea
 	padding-right:30px
 	opacity:.5
 	fade()
@@ -70,6 +70,9 @@ input[type="text"], input[type="password"], input[type="tel"], select
 	&:focus
 		opacity:1
 		background-position: 0 0
+
+textarea
+	min-height:200px
 
 .input-ok-indicator
 	opacity:0
@@ -80,7 +83,7 @@ input[type="text"], input[type="password"], input[type="tel"], select
 	fade()
 
 .input-ok
-	input[type="text"], input[type="password"], input[type="tel"], select
+	input[type="text"],input[type="date"],input[type="time"],input[type="number"],input[type="password"], input[type="tel"], select, textarea
 		opacity: 1
 		fade()
 	.input-ok-indicator
@@ -120,3 +123,7 @@ input[type="text"], input[type="password"], input[type="tel"], select
 	&[disabled]
 		opacity: 0.5
 		pointer-events: none
+
+.parent-relation
+	i
+		margin-left:15px
