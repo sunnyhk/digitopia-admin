@@ -14,6 +14,7 @@ module.exports = function (grunt) {
 		'node_modules/bootstrap/dist/js/bootstrap.js',
 		'node_modules/jquery.payment/lib/jquery.payment.js',
 		'node_modules/moment/moment.js',
+		'node_modules/lodash/lodash.js',
 		'node_modules/async/dist/async.js',
 		'node_modules/validate.js/validate.js',
 		'node_modules/digitopia/dist/js/digitopia.js',
@@ -24,7 +25,6 @@ module.exports = function (grunt) {
 	var cssFiles = [
 		'node_modules/digitopia/dist/css/digitopia.css',
 		'assets/vendor/*.css',
-		'working/css/*.css',
 		'assets/css/*.css'
 	];
 
@@ -49,6 +49,9 @@ module.exports = function (grunt) {
 		cssFiles,
 		lessFiles
 	);
+
+	cssFiles.push('working/css/*.css');
+
 	grunt.initConfig({
 		jsDistDir: 'client/dist/js/',
 		cssDistDir: 'client/dist/css/',

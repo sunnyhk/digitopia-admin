@@ -33,23 +33,26 @@ block content
 																i.delete-relation-button.fa.fa-times-circle.fa(data-foreign-key= parent.foreignKey)
 												.col-sm-6
 													if mode === 'edit'
-														input.form-control(type="text" placeholder="Lookup in " + parent.model data-jsclass="lookupController" data-lookup-endpoint= parent.lookupEndpoint data-lookup-property= parent.lookupProperty data-foreign-key= parent.foreignKey)
-														
+														.position-relative
+															input.form-control(type="text" placeholder="Lookup in " + parent.model data-jsclass="lookupController" data-endpoint= parent.lookupEndpoint data-lookup-property= parent.lookupProperty data-foreign-key= parent.foreignKey)
+															ul.lookup-results
 								- var properties = mode === 'view' ? schema.admin.viewProperties : schema.admin.editProperties
 
 								for property in properties
+									- var type = schema.properties[property].admin.inputType.toLowerCase()
+
 									.form-group
 										label.col-sm-2.control-label
 											= property
 										.col-sm-9.position-relative
 											- var dataType = schema.properties[property].type.toLowerCase()
-											- var type = schema.properties[property].admin.inputType.toLowerCase()
 											- var options = schema.properties[property].admin.options
 											- var multiple = schema.properties[property].admin.multiple
 											- var readonly = schema.properties[property].admin.readonly
 											- var val = instance[property]
 											- var encode = ''
 											- var validations = [];
+											
 											for validation,i in schema.properties[property].admin.validate
 												- validations.push(i + '=' + validation);
 
@@ -92,25 +95,22 @@ block content
 														
 														div(class= multiple ? "checkbox" : "radio")
 															label
-																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property value= option checked= checked)
+																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property value= option checked= checked readonly= readonly)
 																= ' ' + option
 												else if type === 'textarea'
 													textarea.form-control(name= property data-datatype= dataType data-encode= encode)= val
 												else if type === 'checkbox'
 													.input-margins
-														input(type= type data-datatype= dataType data-encode= encode name= property value= "true" checked= val)
+														input(type= type data-datatype= dataType data-encode= encode name= property value= "true" checked= val readonly= readonly)
 												else if type === 'datetime'
 														- var dt = val ? val.split(' ') : [null,null]
 														.row
 															.col-xs-6
-																input.form-control(type= 'date' data-datatype= type data-encode= encode name= property value= dt[0])
+																input.form-control(type= 'date' data-datatype= type data-encode= encode name= property value= dt[0] readonly= readonly)
 															.col-xs-6
-																input.form-control(type= 'time' data-datatype= type data-encode= encode data-skip= true name= property+'-time' value= dt[1])
+																input.form-control(type= 'time' data-datatype= type data-encode= encode data-skip= true name= property+'-time' value= dt[1] readonly= readonly)
 												else
-													if query[property] || property === 'id'
-														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val readonly)
-													else
-														input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val data-validate= validations.join(','))
+													input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val data-validate= validations.join(',') readonly= readonly)
 												.cc-brand
 												.input-ok-indicator
 													span.glyphicon.glyphicon-ok

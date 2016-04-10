@@ -45,8 +45,8 @@
 			$(this.element.find('.delete-relation-button')).confirmation({
 				placement: 'left',
 				'onConfirm': function (event, element) {
-					self.element.find('form').find('.parent-relation').empty();
-					self.element.find('form').find('input[name="' + $(element).data('foreign-key') + '"]').val('');
+					$(element).closest('form').find('input[name="' + $(element).data('foreign-key') + '"]').val('').attr('value', '');
+					$(element).closest('.form-group').find('.parent-relation').empty();
 				}
 			});
 

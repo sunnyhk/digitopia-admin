@@ -28,7 +28,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 		}
 		else {
 			var schema = getModelInfo(req.params.model);
-			res.send(schema);
+			res.send('<pre>' + JSON.stringify(schema, null, ' ') + '</pre>');
 		}
 	});
 
@@ -373,6 +373,14 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 				}
 			}
 
+		}
+
+		for (var relation in result.relations) {
+			if (result.relations[relation].type === 'belongsTo') {
+				var rel = result.relations[relation];
+				var foreignKey = rel.keyFrom;
+				result.properties[foreignKey].admin.readonly = true;
+			}
 		}
 
 		return result;
