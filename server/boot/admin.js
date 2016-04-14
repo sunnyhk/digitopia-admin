@@ -1,3 +1,4 @@
+var loopback = require('loopback');
 var async = require('async');
 var jade = require('jade');
 var path = require('path');
@@ -6,6 +7,11 @@ var _ = require('lodash');
 
 module.exports = function (server, userAuth, userModelName, tableNames) {
 	var router = server.loopback.Router();
+
+	var path = require('path');
+	var p = path.join(__dirname, '../../client/dist');
+	console.log('mounting /dist/admin on ', p);
+	server.use('/admin/dist/', loopback.static(p));
 
 	function render(template, locals, next) {
 		if (!locals) {

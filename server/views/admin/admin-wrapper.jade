@@ -14,9 +14,9 @@ html(lang="en")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
 
     if env === 'production'
-      link(rel='stylesheet' href="/dist/admin/css/digitopia-admin.min.css")
+      link(rel='stylesheet' href="/admin/dist/css/digitopia-admin.min.css")
     else 
-      link(rel='stylesheet' href="/dist/admin/css/digitopia-admin.css")
+      link(rel='stylesheet' href="/admin/dist/css/digitopia-admin.css")
 
     block css
       
@@ -54,6 +54,6 @@ html(lang="en")
     block controller
 
     if env === 'production'
-      script(src="/dist/admin/js/digitopia-admin.min.js")
+      script(src="/admin/dist/js/digitopia-admin.min.js")
     else
-      script(src="/dist/admin/js/digitopia-admin.js")
+      script(src="/admin/dist/js/digitopia-admin.js")
