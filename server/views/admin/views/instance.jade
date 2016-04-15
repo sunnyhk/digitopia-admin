@@ -29,10 +29,10 @@ block content
 													.parent-relation.input-margins
 														if parent.description
 															a(href= parent.url)= parent.description
-															if mode === 'edit'
+															if mode !== 'view'
 																i.delete-relation-button.fa.fa-times-circle.fa(data-foreign-key= parent.foreignKey)
 												.col-sm-6
-													if mode === 'edit'
+													if mode !== 'view'
 														.position-relative
 															input.form-control(type="text" placeholder="Lookup in " + parent.model data-jsclass="lookupController" data-endpoint= parent.lookupEndpoint data-lookup-property= parent.lookupProperty data-foreign-key= parent.foreignKey)
 															ul.lookup-results

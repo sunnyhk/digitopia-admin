@@ -150,10 +150,12 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 			var parents = [];
 			var children = {};
 
-			if (theInstance) {
-				for (var i in parentRelations) {
-					var relation = parentRelations[i];
-					var related = theInstance[relation.name]();
+			for (var i in parentRelations) {
+				var relation = parentRelations[i];
+
+				if (!theInstance && relation.polymorphic) {}
+				else {
+					var related = theInstance ? theInstance[relation.name]() : [];
 					var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
 					var relatedSchema = getModelInfo(relatedModel);
 					parents.push({
@@ -167,10 +169,13 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 						description: related ? related[relatedSchema.admin.defaultProperty] : null
 					});
 				}
+			}
 
-				for (var i in childRelations) {
-					var relation = childRelations[i];
-					var related = undefined;
+			for (var i in childRelations) {
+				var relation = childRelations[i];
+				var related = undefined;
+
+				if (theInstance) {
 					if (relation.type === 'hasOne') {
 						if (theInstance[relation.name]()) {
 							related = [theInstance[relation.name]()];
@@ -179,44 +184,45 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 					else {
 						related = theInstance[relation.name]();
 					}
+				}
 
-					// compute url if child does not exist or hasMany
-					var createChild = "";
-					if (relation.multiple || !related || !related.length) {
-						createChild = '/admin/views/' + relation.modelTo + '/add?' + relation.keyTo + '=' + id;
-						if (relation.polymorphic) {
-							createChild += '&' + relation.polymorphic.discriminator + '=' + model;
-						}
+				// compute url if child does not exist or hasMany
+				var createChild = "";
+				if (relation.multiple || !related || !related.length) {
+					createChild = '/admin/views/' + relation.modelTo + '/add?' + relation.keyTo + '=' + id;
+					if (relation.polymorphic) {
+						createChild += '&' + relation.polymorphic.discriminator + '=' + model;
 					}
+				}
 
-					if (!children[relation.name]) {
-						children[relation.name] = {
-							relation: relation,
-							createUrl: createChild,
-							children: []
-						};
-					}
+				if (!children[relation.name]) {
+					children[relation.name] = {
+						relation: relation,
+						createUrl: createChild,
+						children: []
+					};
+				}
 
-					if (related) {
-						var relatedModel = relation.modelTo;
-						var relatedSchema = getModelInfo(relatedModel);
+				if (related) {
+					var relatedModel = relation.modelTo;
+					var relatedSchema = getModelInfo(relatedModel);
 
-						for (var j = 0; j < related.length; j++) {
-							var child = related[j];
-							var item = {
-								name: relation.name,
-								model: relatedModel,
-								type: relation.type,
-								url: '/admin/views/' + relatedModel + '/' + child.id + '/view',
-								description: child[relatedSchema.admin.defaultProperty]
-							}
-
-							children[relation.name].children.push(item);
+					for (var j = 0; j < related.length; j++) {
+						var child = related[j];
+						var item = {
+							name: relation.name,
+							model: relatedModel,
+							type: relation.type,
+							url: '/admin/views/' + relatedModel + '/' + child.id + '/view',
+							description: child[relatedSchema.admin.defaultProperty]
 						}
+
+						children[relation.name].children.push(item);
 					}
 				}
 			}
-			else {
+
+			if (!theInstance) {
 				theInstance = {};
 			}
 
