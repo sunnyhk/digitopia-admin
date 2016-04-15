@@ -129,7 +129,7 @@
 						}
 					}
 
-					if (($(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') || $(this).is(':checked')) {
+					if (($(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') || $(this).is(':checked') || datatype === 'boolean') {
 						if (encode === 'json') {
 							if (val) {
 								form[name] = JSON.parse(val);
