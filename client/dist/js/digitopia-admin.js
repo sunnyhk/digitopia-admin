@@ -40462,8 +40462,16 @@ function GetJQueryPlugin(classname,obj) {
 				var datatype = $(this).data('datatype');
 				var encode = $(this).data('encode');
 				var skip = $(this).data('skip');
+				if ($(this).data('value')) {
+					val = $(this).data('value');
+				}
 
 				if (!skip) {
+					if (datatype === 'array') {
+						if (!(name in form)) {
+							form[name] = [];
+						}
+					}
 
 					if (datatype === 'date') {
 						val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -40478,7 +40486,7 @@ function GetJQueryPlugin(classname,obj) {
 						}
 					}
 
-					if ($(this).attr('type') !== 'checkbox' || $(this).is(':checked')) {
+					if (($(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') || $(this).is(':checked')) {
 						if (encode === 'json') {
 							if (val) {
 								form[name] = JSON.parse(val);
@@ -40488,9 +40496,6 @@ function GetJQueryPlugin(classname,obj) {
 							}
 						}
 						else if (datatype === 'array') {
-							if (!(name in form)) {
-								form[name] = [];
-							}
 							form[name].push(val);
 						}
 						else {

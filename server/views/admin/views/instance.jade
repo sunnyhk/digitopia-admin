@@ -95,7 +95,7 @@ block content
 														
 														div(class= multiple ? "checkbox" : "radio")
 															label
-																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property value= option checked= checked readonly= readonly)
+																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property data-value= option checked= checked readonly= readonly)
 																= ' ' + option
 												else if type === 'textarea'
 													textarea.form-control(name= property data-datatype= dataType data-encode= encode)= val
