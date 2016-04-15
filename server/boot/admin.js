@@ -10,7 +10,7 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 
 	var path = require('path');
 	var p = path.join(__dirname, '../../client/dist');
-	console.log('mounting /dist/admin on ', p);
+	console.log('mounting /admin/dist on ', p);
 	server.use('/admin/dist/', loopback.static(p));
 
 	function render(template, locals, next) {

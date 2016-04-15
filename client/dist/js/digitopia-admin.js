@@ -40833,7 +40833,7 @@ function GetJQueryPlugin(classname,obj) {
 						var cardType = $.payment.cardType(val);
 						input.closest('.form-group').find('.cc-brand').empty();
 						if (cardType) {
-							var img = '<img src="/dist/admin/images/icons/' + cardType + '.png">';
+							var img = '<img src="/admin/dist/images/icons/' + cardType + '.png">';
 							input.closest('.form-group').find('.cc-brand').html(img);
 						}
 						var isvalid = $.payment.validateCardNumber(val);
