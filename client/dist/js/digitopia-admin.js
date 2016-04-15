@@ -40466,6 +40466,10 @@ function GetJQueryPlugin(classname,obj) {
 					val = $(this).data('value');
 				}
 
+				if (datatype === 'boolean' && !val) {
+					val = false;
+				}
+
 				if (!skip) {
 					if (datatype === 'array') {
 						if (!(name in form)) {
