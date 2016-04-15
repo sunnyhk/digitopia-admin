@@ -5,6 +5,19 @@ var path = require('path');
 var extend = require('util')._extend;
 var _ = require('lodash');
 
+var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads) {
+	if (uploads && uploads.length) {
+		for (var j = 0; j < uploads.length; j++) {
+			if (uploads[j].property === prop) {
+				return uploads[j];
+			}
+		}
+	}
+	return {
+		url: '/admin/dist/images/fpo.jpg'
+	};
+};
+
 module.exports = function (server, userAuth, userModelName, tableNames) {
 	var router = server.loopback.Router();
 
@@ -19,6 +32,8 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 		}
 		locals.userModel = userModelName;
 		locals.menu = tableNames;
+		locals.adminGetUploadForProperty = adminGetUploadForProperty;
+
 		var templatePath = path.join(__dirname, '../views/', template);
 		var fn = jade.compileFile(templatePath, {
 			'pretty': true,
