@@ -369,6 +369,9 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 			if (type === 'String') {
 				type = 'text';
 			}
+			if (type === 'Text') {
+				type = 'textarea';
+			}
 			if (type === 'Number') {
 				type = 'number';
 			}
