@@ -18,13 +18,16 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 	};
 };
 
-module.exports = function (server, userAuth, userModelName, tableNames) {
+module.exports = function (server, userAuth, userModelName, tableNames, options) {
 	var router = server.loopback.Router();
 
 	var path = require('path');
 	var p = path.join(__dirname, '../../client/dist');
-	console.log('mounting /admin/dist on ', p);
 	server.use('/admin/dist/', loopback.static(p));
+
+	if (!options) {
+		options = {};
+	}
 
 	function render(template, locals, next) {
 		if (!locals) {
@@ -33,12 +36,14 @@ module.exports = function (server, userAuth, userModelName, tableNames) {
 		locals.userModel = userModelName;
 		locals.menu = tableNames;
 		locals.adminGetUploadForProperty = adminGetUploadForProperty;
+		locals.adminOptions = options;
 
 		var templatePath = path.join(__dirname, '../views/', template);
 		var fn = jade.compileFile(templatePath, {
 			'pretty': true,
 			'filename': templatePath
 		});
+
 		var html = fn(extend(server.locals, locals));
 		next(null, html);
 	}

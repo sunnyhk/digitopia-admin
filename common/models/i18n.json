@@ -1,0 +1,29 @@
+{
+	"name": "I18n",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"locale": {
+			"type": "string",
+			"required": true
+		},
+		"key": {
+			"type": "string",
+			"required": true
+		},
+		"value": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"validations": [],
+	"relations": {},
+	"acls": [],
+	"methods": {},
+	"admin": {
+		"defaultProperty": "key"
+	}
+}
