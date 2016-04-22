@@ -1,4 +1,3 @@
-var i18n = require('i18n');
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
@@ -9,7 +8,7 @@ module.exports = function (I18n) {
 
 	function i18nUpdate(ctx, next) {
 		console.log('observe %j', ctx);
-		var locales = i18n.getLocales();
+		var locales = I18n.app.get('i18n').getLocales();
 		async.mapSeries(locales, saveLocaleFile, function (err, results) {
 			if (err) {
 				return next(err);
@@ -20,6 +19,8 @@ module.exports = function (I18n) {
 	}
 
 	function saveLocaleFile(locale, cb) {
+		console.log('locale:', locale);
+
 		I18n.app.models.I18n.find({
 			'where': {
 				'locale': locale
