@@ -50,7 +50,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 	router.get('/admin/schema/:model', userAuth, function (req, res, next) {
 		if (!server.models[req.params.model]) {
-			res.sendStatatus(404);
+			res.sendStatus(404);
 		}
 		else {
 			var schema = getModelInfo(req.params.model);
