@@ -100,8 +100,10 @@ block content
 												else if type === 'textarea'
 													textarea.form-control(name= property data-datatype= dataType data-encode= encode)= val
 												else if type === 'checkbox'
+													if !val 
+														- val = false
 													.input-margins
-														input(type= type data-datatype= dataType data-encode= encode name= property value= "true" checked= val readonly= readonly)
+														input(type= type data-datatype= dataType data-encode= encode name= property checked= val readonly= readonly)
 												else if type === 'datetime'
 														- var dt = val ? val.split(' ') : [null,null]
 														.row

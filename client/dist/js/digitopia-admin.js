@@ -40458,52 +40458,57 @@ function GetJQueryPlugin(classname,obj) {
 
 			self.element.find('input,textarea,select').each(function () {
 				var name = $(this).attr('name');
-				var val = $(this).val() ? $(this).val() : null;
-				var datatype = $(this).data('datatype');
-				var encode = $(this).data('encode');
-				var skip = $(this).data('skip');
-				if ($(this).data('value')) {
-					val = $(this).data('value');
-				}
+				if (name) {
+					var val = $(this).val() ? $(this).val() : null;
+					var datatype = $(this).data('datatype');
+					var encode = $(this).data('encode');
+					var skip = $(this).data('skip');
+					if ($(this).data('value')) {
+						val = $(this).data('value');
+					}
 
-				if (datatype === 'boolean' && !val) {
-					val = false;
-				}
-
-				if (!skip) {
-					if (datatype === 'array') {
-						if (!(name in form)) {
-							form[name] = [];
+					if (datatype === 'boolean') {
+						val = false;
+						if ($(this).is(':checked')) {
+							val = true;
 						}
 					}
 
-					if (datatype === 'date') {
-						val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
-					}
-
-					if (datatype === 'datetime') {
-						var sel = '[name="' + name + '-time"]';
-						var timePart = self.element.find(sel).val();
-						if (timePart) {
-							val += '-' + timePart;
-							val = moment.utc(val, 'YYYY-MM-DD-hh:mm').format('YYYY-MM-DDThh:mm');
+					if (!skip) {
+						if (datatype === 'array') {
+							if (!(name in form)) {
+								form[name] = [];
+							}
 						}
-					}
 
-					if (($(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') || $(this).is(':checked') || datatype === 'boolean') {
-						if (encode === 'json') {
-							if (val) {
-								form[name] = JSON.parse(val);
+						if (datatype === 'date') {
+							val = moment.utc(val, 'YYYY-MM-DD').format('YYYY-MM-DD');
+						}
+
+						if (datatype === 'datetime') {
+							var sel = '[name="' + name + '-time"]';
+							var timePart = self.element.find(sel).val();
+							if (timePart) {
+								val += '-' + timePart;
+								val = moment.utc(val, 'YYYY-MM-DD-hh:mm').format('YYYY-MM-DDThh:mm');
+							}
+						}
+
+						if (($(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') || $(this).is(':checked') || datatype === 'boolean') {
+							if (encode === 'json') {
+								if (val) {
+									form[name] = JSON.parse(val);
+								}
+								else {
+									form[name] = null;
+								}
+							}
+							else if (datatype === 'array') {
+								form[name].push(val);
 							}
 							else {
-								form[name] = null;
+								form[name] = val;
 							}
-						}
-						else if (datatype === 'array') {
-							form[name].push(val);
-						}
-						else {
-							form[name] = val;
 						}
 					}
 				}
