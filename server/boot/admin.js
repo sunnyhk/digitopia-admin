@@ -213,6 +213,9 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 					if (relation.polymorphic) {
 						createChild += '&' + relation.polymorphic.discriminator + '=' + model;
 					}
+					if (relation.modelThrough) {
+						createChild = '/admin/views/' + relation.modelThrough + '/add?' + relation.keyTo + '=' + id;
+					}
 				}
 
 				if (!children[relation.name]) {
