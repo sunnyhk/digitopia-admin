@@ -240,6 +240,10 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 							description: child[relatedSchema.admin.defaultProperty]
 						}
 
+						if (relation.modelThrough) {
+							item.url = '/admin/views/' + relation.modelThrough + '/' + child.id + '/view'
+						}
+
 						children[relation.name].children.push(item);
 					}
 				}
