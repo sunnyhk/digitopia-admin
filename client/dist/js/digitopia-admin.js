@@ -40373,18 +40373,23 @@ function GetJQueryPlugin(classname,obj) {
 
 			this.element.on('click', '.list-button', function (e) {
 				e.preventDefault();
-				loadPage('/admin/views/' + self.settings.model + '/index')
+				loadPage('/admin/views/' + self.settings.model + '/index');
+			});
+
+			this.element.on('click', '.download-button', function (e) {
+				e.preventDefault();
+				document.location.href = '/admin/views/' + self.settings.model + '/index?format=json';
 			});
 
 			this.element.on('click', '.add-button', function (e) {
 				e.preventDefault();
-				loadPage('/admin/views/' + self.settings.model + '/add')
+				loadPage('/admin/views/' + self.settings.model + '/add');
 			});
 
 			this.element.on('click', '.edit-button', function (e) {
 				e.preventDefault();
 				var id = $(this).data('id');
-				loadPage('/admin/views/' + self.settings.model + '/' + id + '/edit')
+				loadPage('/admin/views/' + self.settings.model + '/' + id + '/edit');
 			});
 
 			this.element.on('click', '.save-button', function (e) {
@@ -40426,6 +40431,7 @@ function GetJQueryPlugin(classname,obj) {
 
 		this.stop = function () {
 			this.element.off('click', '.list-button');
+			this.element.off('click', '.download-button');
 			this.element.off('click', '.delete-button');
 			this.element.off('click', '.edit-button');
 			this.element.off('click', '.add-button');

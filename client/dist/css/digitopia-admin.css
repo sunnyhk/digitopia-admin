@@ -7206,6 +7206,7 @@ body {
 .admin-scope i.fa-2x {
   margin-right: 15px;
   vertical-align: middle;
+  cursor: pointer;
 }
 .admin-scope .pull-right i.fa-2x {
   margin-right: 0px;

@@ -76,6 +76,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 	router.get(/^\/admin\/views\/([^\/]*)\/index$/, userAuth, function (req, res, next) {
 		var model = req.params[0];
 		var schema = getModelInfo(model);
+		var format = req.query.format;
 
 		var q;
 
@@ -93,6 +94,10 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 		}
 
 		server.models[model].find(q, function (err, instances) {
+			if (format === 'json') {
+				return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
+			}
+
 			render('admin/views/index.jade', {
 				model: model,
 				schema: schema,
