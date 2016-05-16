@@ -6,7 +6,7 @@ module.exports = function (I18n) {
 	I18n.observe('after delete', i18nUpdate);
 	I18n.observe('after save', i18nUpdate);
 
-	I18n.prototype.buildLocales = i18nUpdate;
+	I18n.buildLocales = i18nUpdate;
 
 	function i18nUpdate(ctx, next) {
 		console.log('observe %j', ctx);
