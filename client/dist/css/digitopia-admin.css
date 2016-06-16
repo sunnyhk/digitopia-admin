@@ -7416,3 +7416,9 @@ textarea {
 .parent-relation i {
   margin-left: 15px;
 }
+.pagination-container {
+  overflow: auto;
+}
+.pagination-container .pagination {
+  margin: 0px;
+}

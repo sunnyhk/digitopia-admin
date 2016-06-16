@@ -26,5 +26,22 @@ block content
 							tr.instance-select(data-id= instance.id)
 								for property in schema.admin.listProperties
 									td.input-margins= instance[property]
-					.panel-footer.text-right
-						| pagination
+					.panel-footer
+						.pagination-container
+							ul.pagination.pull-right(data-jsclass="paginationController")
+								if prev != page
+									<li><a href="#{uri}&p=#{prev}">&laquo;</a></li>
+								else 
+									<li class="disabled"><a href="#">&laquo;</a></li>
+								<li id="pagination-elipsis-start" class="disabled"><a href="#"><i class="glyphicon glyphicon-option-horizontal"></i></a></li>
+								- for (p = 1; p <= pages; p++) {
+									if p == page
+										<li class="active pagination-page"><a href="#{uri}&p=#{p}">#{p}</a></li>
+									else
+										<li class="pagination-page"><a href="#{uri}&p=#{p}">#{p}</a></li>
+								- }
+								<li id="pagination-elipsis-end" class="disabled"><a href="#"><i class="glyphicon glyphicon-option-horizontal"></i></a></li>							
+								if next != page
+									<li><a href="#{uri}&p=#{next}">&raquo;</a></li>
+								else 
+									<li class="disabled"><a href="#">&raquo;</a></li>

@@ -78,33 +78,49 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 		var schema = getModelInfo(model);
 		var format = req.query.format;
 
-		var q;
+		var query = req.query.q ? req.query.q : '';
+
+		var q = {};
 
 		if (!req.query.property) {
 			req.query.property = schema.admin.listProperties[0];
 		}
 
-		if (req.query.q) {
+		if (query) {
 			q = {
 				'where': {}
 			};
 			q.where[req.query.property] = {
-				'like': req.query.q + '%'
+				'like': query + '%'
 			};
 		}
 
-		server.models[model].find(q, function (err, instances) {
-			if (format === 'json') {
-				return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
-			}
+		var p = req.query.p ? req.query.p : 1;
 
-			render('admin/views/index.jade', {
-				model: model,
-				schema: schema,
-				instances: instances,
-				q: req.query.q
-			}, function (err, html) {
-				res.send(html);
+		q.limit = 30;
+		q.skip = (p - 1) * 30;
+
+		server.models[model].count({}, function (err, count) {
+
+			server.models[model].find(q, function (err, instances) {
+				if (format === 'json') {
+					return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
+				}
+
+				render('admin/views/index.jade', {
+					model: model,
+					schema: schema,
+					instances: instances,
+					count: count,
+					pages: Math.ceil(count / 30),
+					p: p,
+					next: Math.ceil(count / 30) < p ? p + 1 : p,
+					prev: p > 1 ? p - 1 : 1,
+					q: query,
+					uri: 'index?q=' + query + '&property=' + req.query.property
+				}, function (err, html) {
+					res.send(html);
+				});
 			});
 		});
 	});
