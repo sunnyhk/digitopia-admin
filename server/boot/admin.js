@@ -44,8 +44,18 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 			'filename': templatePath
 		});
 
-		var html = fn(extend(server.locals, locals));
-		next(null, html);
+		if (options.dashboard) {
+			options.dashboard(function (err, dash) {
+				locals.dashboardData = dash;
+				var html = fn(extend(server.locals, locals));
+				next(null, html);
+			});
+		}
+		else {
+
+			var html = fn(extend(server.locals, locals));
+			next(null, html);
+		}
 	}
 
 	router.get('/admin/schema/:model', userAuth, function (req, res, next) {

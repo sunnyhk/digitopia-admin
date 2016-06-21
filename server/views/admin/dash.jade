@@ -3,8 +3,8 @@ extends ./admin-wrapper
 block content
 	.jumbotron
 		.container
-			if adminOptions.dashboard
-				.dashbord= adminOptions.dashboard()
+			if dashboardData
+				.dashboard= dashboardData
 			else 
 				h1 digitopia/admin Dashboard
 
