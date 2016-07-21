@@ -2,6 +2,7 @@ var loopback = require('loopback');
 var async = require('async');
 var jade = require('jade');
 var path = require('path');
+var moment = require('moment');
 var extend = require('util')._extend;
 var _ = require('lodash');
 
@@ -20,6 +21,8 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 
 module.exports = function (server, userAuth, userModelName, tableNames, options) {
 	var router = server.loopback.Router();
+
+	server.locals.moment = moment;
 
 	var path = require('path');
 	var p = path.join(__dirname, '../../client/dist');
