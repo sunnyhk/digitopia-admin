@@ -120,27 +120,27 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 				if (format === 'json') {
 					return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
 				}
-
-				if (format === 'csv') {
+				else if (format === 'csv') {
 					csv.stringify(instances, function (err, formatted) {
 						return res.set('Content-Disposition', ' attachment; filename="' + model + '.csv"').send(formatted);
 					});
 				}
-
-				render('admin/views/index.jade', {
-					model: model,
-					schema: schema,
-					instances: instances,
-					count: count,
-					pages: Math.ceil(count / 30),
-					p: p,
-					next: Math.ceil(count / 30) < p ? p + 1 : p,
-					prev: p > 1 ? p - 1 : 1,
-					q: query,
-					uri: 'index?q=' + query + '&property=' + req.query.property
-				}, function (err, html) {
-					res.send(html);
-				});
+				else {
+					render('admin/views/index.jade', {
+						model: model,
+						schema: schema,
+						instances: instances,
+						count: count,
+						pages: Math.ceil(count / 30),
+						p: p,
+						next: Math.ceil(count / 30) < p ? p + 1 : p,
+						prev: p > 1 ? p - 1 : 1,
+						q: query,
+						uri: 'index?q=' + query + '&property=' + req.query.property
+					}, function (err, html) {
+						res.send(html);
+					});
+				}
 			});
 		});
 	});
