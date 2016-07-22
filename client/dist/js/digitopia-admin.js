@@ -40378,7 +40378,7 @@ function GetJQueryPlugin(classname,obj) {
 
 			this.element.on('click', '.download-button', function (e) {
 				e.preventDefault();
-				document.location.href = '/admin/views/' + self.settings.model + '/index?format=json';
+				document.location.href = '/admin/views/' + self.settings.model + '/index?format=csv';
 			});
 
 			this.element.on('click', '.add-button', function (e) {

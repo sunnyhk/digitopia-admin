@@ -4,6 +4,7 @@ var jade = require('jade');
 var path = require('path');
 var moment = require('moment');
 var extend = require('util')._extend;
+var csv = require('csv');
 var _ = require('lodash');
 
 var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads) {
@@ -118,6 +119,12 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 			server.models[model].find(q, function (err, instances) {
 				if (format === 'json') {
 					return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
+				}
+
+				if (format === 'csv') {
+					csv.stringify(instances, function (err, formatted) {
+						return res.set('Content-Disposition', ' attachment; filename="' + model + '.csv"').send(formatted);
+					});
 				}
 
 				render('admin/views/index.jade', {
