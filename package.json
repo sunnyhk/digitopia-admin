@@ -17,7 +17,7 @@
     "moment": "^2.12.0",
     "npm-modernizr": "^2.8.3",
     "validate.js": "^0.9.0",
-    "csv": "^1.1.0"
+    "json2csv": "*"
   },
   "repository": {
     "type": "git",
