@@ -4,7 +4,7 @@ var jade = require('jade');
 var path = require('path');
 var moment = require('moment');
 var extend = require('util')._extend;
-var json2csv = require('json2csv');
+var csv = require('csv');
 var _ = require('lodash');
 
 var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads) {
@@ -121,11 +121,24 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 					return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
 				}
 				else if (format === 'csv') {
-					var formatted = json2csv({
-						data: instances
+					var items = [];
+					var headings = [];
+					for (var i = 0; i < instances.length; i++) {
+						var row = [];
+						for (var property in instances[i].__data) {
+							if (i === 0) {
+								headings.push(property);
+							}
+							row.push(instances[i][property]);
+						}
+						if (i === 0) {
+							items.push(headings);
+						}
+						items.push(row);
+					}
+					csv.stringify(items, function (err, formatted) {
+						return res.set('Content-Disposition', ' attachment; filename="' + model + '.csv"').send(formatted);
 					});
-
-					return res.set('Content-Disposition', ' attachment; filename="' + model + '.csv"').send(formatted);
 				}
 				else {
 					render('admin/views/index.jade', {
