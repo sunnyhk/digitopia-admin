@@ -111,14 +111,16 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 		var p = req.query.p ? req.query.p : 1;
 
-		q.limit = 30;
-		q.skip = (p - 1) * 30;
+		if (!format) {
+			q.limit = 30;
+			q.skip = (p - 1) * 30;
+		}
 
 		server.models[model].count({}, function (err, count) {
 
 			server.models[model].find(q, function (err, instances) {
 				if (format === 'json') {
-					return res.set('Content-Disposition', ' attachment; filename="' + model + '.json"').send(instances);
+					return res.attachment(model + '.json').send(instances);
 				}
 				else if (format === 'csv') {
 					var items = [];
@@ -137,7 +139,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 						items.push(row);
 					}
 					csv.stringify(items, function (err, formatted) {
-						return res.set('Content-Disposition', ' attachment; filename="' + model + '.csv"').send(formatted);
+						return res.attachment(model + '.csv').send(formatted);
 					});
 				}
 				else {
