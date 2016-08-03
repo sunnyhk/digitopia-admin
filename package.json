@@ -1,6 +1,6 @@
 {
   "name": "digitopia-admin",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Loopback Site Admin Backend",
   "main": "index.js",
   "scripts": {
