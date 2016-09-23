@@ -52,6 +52,10 @@ html(lang="en")
               button.btn.btn-success(type='submit') Sign in
           .hidden-logged-out
             .navbar-form.navbar-right
+              span
+                = 'Logged in as ' + currentUser.email
+                if isSuperUser
+                  = ' (superuser)'
               button.btn.btn-default(data-jsclass="adminLogoutController"  data-endpoint= '/api/' + userModel + '/logout') Log Out
               
     #admin-content.container-fluid(data-hijax="true")

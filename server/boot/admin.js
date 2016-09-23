@@ -74,6 +74,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 	// need login
 	router.get('/admin/need-login', function (req, res, next) {
+
 		render('admin/views/need-login.jade', {}, function (err, html) {
 			res.send(html);
 		});
@@ -81,13 +82,20 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 	// dashboard
 	router.get('/admin', userAuth, function (req, res, next) {
-		render('admin/dash.jade', {}, function (err, html) {
+		var loopbackContext = req.getCurrentContext();
+
+		render('admin/dash.jade', {
+			'currentUser': loopbackContext.get('currentUser'),
+			'isSuperUser': loopbackContext.get('isSuperUser')
+		}, function (err, html) {
 			res.send(html);
 		});
 	});
 
 	// list instances in model
 	router.get(/^\/admin\/views\/([^\/]*)\/index$/, userAuth, function (req, res, next) {
+		var loopbackContext = req.getCurrentContext();
+
 		var model = req.params[0];
 		var schema = getModelInfo(model);
 		var format = req.query.format;
@@ -144,16 +152,18 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 				}
 				else {
 					render('admin/views/index.jade', {
-						model: model,
-						schema: schema,
-						instances: instances,
-						count: count,
-						pages: Math.ceil(count / 30),
-						page: p,
-						next: Math.ceil(count / 30) < p ? p + 1 : p,
-						prev: p > 1 ? p - 1 : 1,
-						q: query,
-						uri: 'index?q=' + query + '&property=' + req.query.property
+						'currentUser': loopbackContext.get('currentUser'),
+						'isSuperUser': loopbackContext.get('isSuperUser'),
+						'model': model,
+						'schema': schema,
+						'instances': instances,
+						'count': count,
+						'pages': Math.ceil(count / 30),
+						'page': p,
+						'next': Math.ceil(count / 30) < p ? p + 1 : p,
+						'prev': p > 1 ? p - 1 : 1,
+						'q': query,
+						'uri': 'index?q=' + query + '&property=' + req.query.property
 					}, function (err, html) {
 						res.send(html);
 					});
@@ -175,6 +185,8 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 	});
 
 	function doTemplate(mode, req, res, next) {
+		var loopbackContext = req.getCurrentContext();
+
 		var model = req.params[0];
 		var id = req.params[1] ? req.params[1] : -1;
 
@@ -237,14 +249,16 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 					var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
 					var relatedSchema = getModelInfo(relatedModel);
 					parents.push({
-						name: relation.name,
-						model: relatedModel,
-						type: relation.type,
-						foreignKey: relation.keyFrom,
-						lookupProperty: relatedSchema.admin.defaultProperty,
-						lookupEndpoint: '/api/' + relatedModel + 's/',
-						url: related ? '/admin/views/' + relatedModel + '/' + related.id + '/view' : null,
-						description: related ? related[relatedSchema.admin.defaultProperty] : null
+						'currentUser': loopbackContext.get('currentUser'),
+						'isSuperUser': loopbackContext.get('isSuperUser'),
+						'name': relation.name,
+						'model': relatedModel,
+						'type': relation.type,
+						'foreignKey': relation.keyFrom,
+						'lookupProperty': relatedSchema.admin.defaultProperty,
+						'lookupEndpoint': '/api/' + relatedModel + 's/',
+						'url': related ? '/admin/views/' + relatedModel + '/' + related.id + '/view' : null,
+						'description': related ? related[relatedSchema.admin.defaultProperty] : null
 					});
 				}
 			}
