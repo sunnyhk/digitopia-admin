@@ -149,7 +149,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 						instances: instances,
 						count: count,
 						pages: Math.ceil(count / 30),
-						p: p,
+						page: p,
 						next: Math.ceil(count / 30) < p ? p + 1 : p,
 						prev: p > 1 ? p - 1 : 1,
 						q: query,
