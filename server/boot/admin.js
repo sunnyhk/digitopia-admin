@@ -20,8 +20,234 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 	};
 };
 
-module.exports = function (server, userAuth, userModelName, tableNames, options) {
+module.exports.setUpRoleToggleAPI = function setUpRoleToggleAPI(myUserModel) {
+
+	myUserModel.toggleadmin = function (id, ctx, done) {
+
+		var currentRoles = [];
+		var req = ctx.req;
+
+		var context = ctx.req.getCurrentContext();
+		var roles = context.get('currentUserRoles');
+		if (roles && roles.length) {
+			for (var i = 0; i < roles.length; i++) {
+				if (roles[i].role().name === 'superuser') {
+					context.set('isSuperUser', 'true');
+				}
+			}
+		}
+
+		if (!context.get('isSuperUser')) {
+			var error = new Error("access denied");
+			error.status = 401;
+			return done(error);
+		}
+
+		myUserModel.findOne({
+			'where': {
+				'id': id
+			}
+		}, function (err, user) {
+			if (err) {
+				return done(err);
+			}
+			else {
+				async.series(
+					[
+						function (cb) {
+							var q = {
+								'where': {
+									'principalType': req.app.models.RoleMapping.USER,
+									'principalId': user.id
+								},
+								'include': ['role']
+							};
+
+							req.app.models.RoleMapping.find(q, function (err, roles) {
+								currentRoles = roles;
+								cb(err);
+							});
+						},
+						function (cb) {
+							var isAdmin = false;
+							var theRole = null;
+							for (var i = 0; i < currentRoles.length; i++) {
+								if (currentRoles[i].role().name === 'admin') {
+									isAdmin = true;
+									theRole = currentRoles[i];
+								}
+							}
+
+							if (isAdmin) {
+								console.log('remove admin');
+								theRole.destroy(cb);
+							}
+							else {
+								console.log('make admin');
+
+								req.app.models.Role.findOne({
+									'where': {
+										'name': 'admin'
+									}
+								}, function (err, role) {
+									role.principals.create({
+										principalType: req.app.models.RoleMapping.USER,
+										principalId: user.id
+									}, function (err, principal) {
+										cb();
+									});
+								});
+							}
+						}
+					],
+					function (err, results) {
+						return done(err);
+					}
+				);
+			}
+		});
+	};
+
+	myUserModel.remoteMethod(
+		'toggleadmin', {
+			http: {
+				path: '/:id/toggleadmin',
+				verb: 'get'
+			},
+			accepts: [{
+				arg: 'id',
+				type: 'number',
+				required: true
+			}, {
+				arg: 'options',
+				type: 'object',
+				http: {
+					source: 'context'
+				}
+			}],
+			returns: {
+				arg: 'result',
+				type: 'object'
+			}
+		}
+	);
+
+	myUserModel.togglesuperuser = function (id, ctx, done) {
+
+		var currentRoles = [];
+		var req = ctx.req;
+
+		var context = ctx.req.getCurrentContext();
+		var roles = context.get('currentUserRoles');
+		if (roles && roles.length) {
+			for (var i = 0; i < roles.length; i++) {
+				if (roles[i].role().name === 'superuser') {
+					context.set('isSuperUser', 'true');
+				}
+			}
+		}
+
+		if (!context.get('isSuperUser')) {
+			var error = new Error("access denied");
+			error.status = 401;
+			return done(error);
+		}
+
+		myUserModel.findOne({
+			'where': {
+				'id': id
+			}
+		}, function (err, user) {
+			if (err) {
+				return done(err);
+			}
+			else {
+				async.series(
+					[
+						function (cb) {
+							var q = {
+								'where': {
+									'principalType': req.app.models.RoleMapping.USER,
+									'principalId': user.id
+								},
+								'include': ['role']
+							};
+
+							req.app.models.RoleMapping.find(q, function (err, roles) {
+								currentRoles = roles;
+								cb(err);
+							});
+						},
+						function (cb) {
+							var isAdmin = false;
+							var isSuperUser = false;
+							var theRole = null;
+							for (var i = 0; i < currentRoles.length; i++) {
+								if (currentRoles[i].role().name === 'superuser') {
+									isSuperUser = true;
+									theRole = currentRoles[i];
+								}
+							}
+
+							if (isSuperUser) {
+								console.log('remove superuser');
+								theRole.destroy(cb);
+							}
+							else {
+								console.log('make superuser');
+
+								req.app.models.Role.findOne({
+									'where': {
+										'name': 'superuser'
+									}
+								}, function (err, role) {
+									role.principals.create({
+										principalType: req.app.models.RoleMapping.USER,
+										principalId: user.id
+									}, function (err, principal) {
+										cb();
+									});
+								});
+							}
+						}
+					],
+					function (err, results) {
+						return done(err);
+					}
+				);
+			}
+		});
+	};
+
+	myUserModel.remoteMethod(
+		'togglesuperuser', {
+			http: {
+				path: '/:id/togglesuperuser',
+				verb: 'get'
+			},
+			accepts: [{
+				arg: 'id',
+				type: 'number',
+				required: true
+			}, {
+				arg: 'options',
+				type: 'object',
+				http: {
+					source: 'context'
+				}
+			}],
+			returns: {
+				arg: 'result',
+				type: 'object'
+			}
+		}
+	);
+};
+
+module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, tableNames, options) {
 	var router = server.loopback.Router();
+
+	var theUserModel = server.models[userModelName];
 
 	server.locals.moment = moment;
 
@@ -37,7 +263,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 		if (!locals) {
 			locals = {};
 		}
-		locals.userModel = userModelName;
+		locals.userModel = theUserModel.pluralModelName;
 		locals.menu = tableNames;
 		locals.adminGetUploadForProperty = adminGetUploadForProperty;
 		locals.adminOptions = options;
@@ -77,6 +303,52 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 		render('admin/views/need-login.jade', {}, function (err, html) {
 			res.send(html);
+		});
+	});
+
+	// need login
+	router.get('/admin/users', userAuth, function (req, res, next) {
+		var loopbackContext = req.getCurrentContext();
+		var currentUser = loopbackContext.get('currentUser');
+		var isSuperUser = loopbackContext.get('isSuperUser');
+
+		if (!isSuperUser) {
+			return next();
+		}
+
+		server.models.Role.findOne({
+			where: {
+				'name': 'admin'
+			}
+		}, function (err, role) {
+			server.models.RoleMapping.find({
+				where: {
+					and: [{
+						'principalType': 'USER'
+					}, {
+						'roleId': role.id
+					}]
+				}
+			}, function (err, mappings) {
+
+				async.map(mappings, function (mapping, done) {
+					theUserModel.findOne({
+						'where': {
+							'id': mapping.principalId
+						}
+					}, function (err, user) {
+						done(err, user);
+					});
+				}, function (err, users) {
+					render('admin/admin-users.jade', {
+						'currentUser': loopbackContext.get('currentUser'),
+						'isSuperUser': loopbackContext.get('isSuperUser'),
+						'users': users
+					}, function (err, html) {
+						res.send(html);
+					});
+				});
+			});
 		});
 	});
 
@@ -196,7 +468,7 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 		var parentRelations = [];
 		var includes = [];
 
-		var modelPlural = model + 's';
+		var modelPlural = req.app.models[model].pluralModelName;
 
 		var endpoint = req.protocol + '://' + req.get('host') + '/api/' + modelPlural;
 		if (id !== -1) {
@@ -220,6 +492,8 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 		}
 
 		var theInstance;
+		var isSuperUser = false;
+		var isAdminUser = false;
 		async.series([
 			function resolve(cb) {
 				server.models[model].findById(id, {
@@ -227,6 +501,37 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 				}, function (err, instance) {
 					theInstance = instance;
 					cb(err, instance);
+				});
+			},
+			function getRoles(cb) {
+				// if this is the user model get the roles
+				if (model !== userModelName) {
+					return cb(null);
+				}
+
+				var q = {
+					'where': {
+						'principalType': req.app.models.RoleMapping.USER,
+						'principalId': theInstance.id
+					},
+					'include': ['role']
+				};
+
+				req.app.models.RoleMapping.find(q, function (err, roles) {
+					if (roles && roles.length) {
+						for (var i = 0; i < roles.length; i++) {
+							if (roles[i].role().name === 'superuser') {
+								isSuperUser = true;
+							}
+						}
+
+						for (var i = 0; i < roles.length; i++) {
+							if (roles[i].role().name === 'admin') {
+								isAdminUser = true;
+							}
+						}
+					}
+					cb(null);
 				});
 			}
 		], function (err, results) {
@@ -249,8 +554,6 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 					var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
 					var relatedSchema = getModelInfo(relatedModel);
 					parents.push({
-						'currentUser': loopbackContext.get('currentUser'),
-						'isSuperUser': loopbackContext.get('isSuperUser'),
 						'name': relation.name,
 						'model': relatedModel,
 						'type': relation.type,
@@ -326,6 +629,11 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 			}
 
 			render('admin/views/instance.jade', {
+				'currentUser': loopbackContext.get('currentUser'),
+				'isSuperUser': loopbackContext.get('isSuperUser'),
+				'isUserModel': model === userModelName,
+				'instanceIsAdminUser': isAdminUser,
+				'instanceIsSuperUser': isSuperUser,
 				'mode': mode,
 				'model': model,
 				'schema': schema,
@@ -499,5 +807,4 @@ module.exports = function (server, userAuth, userModelName, tableNames, options)
 
 		return result;
 	};
-
 };

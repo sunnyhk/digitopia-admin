@@ -1,0 +1,10 @@
+extends ./admin-wrapper
+
+block content
+  p.
+    list admin users, widget to bless user as admin &amp; superuser
+    
+  ul
+    for u in users
+      li
+        = u.email

@@ -41598,6 +41598,11 @@ function GetJQueryPlugin(classname,obj) {
 				self.save();
 			});
 
+			this.element.on('click', '.toggle-admin', function (e) {
+				e.preventDefault();
+				self.toggleAdmin($(this).data('endpoint'));
+			});
+
 			$(this.element.find('.delete-button')).confirmation({
 				placement: 'left',
 				'onConfirm': function () {
@@ -41737,7 +41742,19 @@ function GetJQueryPlugin(classname,obj) {
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					var response = JSON.parse(jqXHR.responseText);
 					flashAjaxStatus('danger', 'Could not ' + method + 'instance: ' + response.error.message);
-				})
+				});
+		};
+
+		this.toggleAdmin = function (endpoint) {
+			$.ajax({
+				method: 'get',
+				url: endpoint
+			}).done(function (data) {
+				$('body').trigger('DigitopiaReloadPage');
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				var response = JSON.parse(jqXHR.responseText);
+				flashAjaxStatus('danger', 'Could not toggle admin' + response.error.message);
+			});
 		};
 	}
 

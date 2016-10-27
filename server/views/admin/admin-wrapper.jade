@@ -43,6 +43,11 @@ html(lang="en")
                 if adminOptions.i18n
                   li
                     a(href='/admin/views/I18n/index')= 'i18n'
+                    
+                if currentUser
+                  if isSuperUser
+                    li
+                      a(href='/admin/users')= 'Admin Users'
           .hidden-logged-in
             form.navbar-form.navbar-right(data-jsclass="adminLoginController" data-endpoint= '/api/' + userModel + '/login')
               .form-group
@@ -52,12 +57,12 @@ html(lang="en")
               button.btn.btn-success(type='submit') Sign in
           .hidden-logged-out
             .navbar-form.navbar-right
-              span
+              span.light
                 if currentUser
-                  = 'Logged in as ' + currentUser.email
+                  = currentUser.email
                   if isSuperUser
                     = ' (superuser)'
-              button.btn.btn-default(data-jsclass="adminLogoutController"  data-endpoint= '/api/' + userModel + '/logout') Log Out
+              button.btn.btn-default.btn-xs(data-jsclass="adminLogoutController"  data-endpoint= '/api/' + userModel + '/logout') Log Out
               
     #admin-content.container-fluid(data-hijax="true")
       block content

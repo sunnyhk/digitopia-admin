@@ -8,6 +8,20 @@ block content
 					.panel.panel-default
 						.panel-heading
 							.pull-right
+								if isSuperUser && isUserModel
+									if instanceIsAdminUser
+										.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/toggleadmin')
+											= "remove adminUser" 
+										if instanceIsSuperUser
+											.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/togglesuperuser')
+												= "remove superUser" 
+										else 
+											.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/togglesuperuser')
+												= "make superUser" 
+									else 
+										.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/toggleadmin')
+											= "make adminUser" 
+									
 								if mode === 'view'
 									i.edit-button.fa.fa-pencil-square-o.fa-2x(data-id= instance.id)
 								else

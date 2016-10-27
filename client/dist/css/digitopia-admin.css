@@ -7165,6 +7165,9 @@ body {
 .admin-scope .hidden {
   display: none;
 }
+.admin-scope .light {
+  color: #eee;
+}
 .admin-scope .lookup-results {
   list-style: none;
   margin: 0;
@@ -7418,4 +7421,12 @@ textarea {
 }
 .pagination-container .pagination {
   margin: 0px;
+}
+.toggle-admin {
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.toggle-admin:hover {
+  color: #f00;
 }
