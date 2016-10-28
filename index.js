@@ -1,1 +1,2 @@
-module.exports = require("./server/boot/admin.js");
+var admin = require("./server/boot/admin.js");
+module.exports = admin;
