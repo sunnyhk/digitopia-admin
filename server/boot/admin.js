@@ -448,11 +448,11 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 		doTemplate('add', req, res, next);
 	});
 
-	router.get(/^\/admin\/views\/([^\/]*)\/(\d+)\/view$/, userAuth, function (req, res, next) {
+	router.get(/^\/admin\/views\/([^\/]*)\/([a-f0-9\-]+)\/view$/, userAuth, function (req, res, next) {
 		doTemplate('view', req, res, next);
 	});
 
-	router.get(/^\/admin\/views\/([^\/]*)\/(\d+)\/edit$/, userAuth, function (req, res, next) {
+	router.get(/^\/admin\/views\/([^\/]*)\/([a-f0-9\-]+)\/edit$/, userAuth, function (req, res, next) {
 		doTemplate('edit', req, res, next);
 	});
 
@@ -504,8 +504,8 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 				});
 			},
 			function getRoles(cb) {
-				// if this is the user model get the roles
-				if (model !== userModelName) {
+				// if this is the user model and there is an instance get the roles
+				if (model !== userModelName || theInstance === null) {
 					return cb(null);
 				}
 
