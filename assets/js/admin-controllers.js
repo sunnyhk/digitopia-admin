@@ -168,7 +168,7 @@
 				}
 			});
 
-			var method = self.settings.mode === 'edit' ? 'put' : 'post';
+			var method = self.settings.mode === 'edit' ? 'patch' : 'post';
 
 			flashAjaxStatus('info', 'saving...');
 
