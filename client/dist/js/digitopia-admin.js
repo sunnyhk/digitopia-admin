@@ -36138,7 +36138,7 @@ if (typeof jQuery === 'undefined') {
         var memoized = _restParam(function memoized(args) {
             var callback = args.pop();
             var key = hasher.apply(null, args);
-            if (has.call(memo, key)) {
+            if (has.call(memo, key)) {   
                 async.setImmediate(function () {
                     callback.apply(null, memo[key]);
                 });
@@ -37659,13 +37659,13 @@ function GetJQueryPlugin(classname,obj) {
 		this.element = $(element);
 
 		var self = this;
-
+		
 		this.orientation = undefined;
 		this.scale = undefined;
 		this.touch = Modernizr.touch;
 		this.disabled = false;
 		this.forceScale = undefined;
-
+		
 		this.config = $.extend({
 			breakpoints: [
 				{ className: 'tiny', maxWidth: 480 },
@@ -37679,7 +37679,7 @@ function GetJQueryPlugin(classname,obj) {
 
 		this.widths = [];
 		this.classes = [];
-
+		
 		this.disableResponsive = function(scale) {
 			$('body').addClass('disable-responsive');
 			this.disabled = true;
@@ -37702,7 +37702,7 @@ function GetJQueryPlugin(classname,obj) {
 					this.widths.push(this.config.breakpoints[i].maxWidth);
 				}
 				this.classes.push(this.config.breakpoints[i].className);
-
+				
 				css+='.' + this.config.breakpoints[i].className + ' .hidden-' + this.config.breakpoints[i].className + '{display:none;}\n';
 				css+='.not-' + this.config.breakpoints[i].className + ' .hidden-not-' + this.config.breakpoints[i].className + '{display:none;}\n';
 				css+='.' + this.config.breakpoints[i].className + ' .shown-' + this.config.breakpoints[i].className + '{display:block;}\n';
@@ -37713,16 +37713,16 @@ function GetJQueryPlugin(classname,obj) {
 			style.type = 'text/css';
 			style.innerHTML = css;
 			document.getElementsByTagName('head')[0].appendChild(style);
-
+			
 			this.element.on('DigitopiaDidResize.digitopiaGeometry',function(e) {
 				e.stopPropagation();
 				if(e.target === this) {
 					self.detectGeometry();
-				}
+				}	
 			});
-
+	
 			this.detectGeometry();
-
+			
 			this.element.on('DigitopiaNewInstance.digitopiaGeometry', function(e,element) {
 				e.stopPropagation();
 				if(e.target === this) {
@@ -37731,7 +37731,7 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			});
 		};
-
+		
 		this.stop = function() {
 			this.element.off('DigitopiaDidResize.digitopiaGeometry');
 			this.element.off('DigitopiaNewInstance.digitopiaGeometry');
@@ -37747,7 +37747,7 @@ function GetJQueryPlugin(classname,obj) {
 			else {
 				newOrientation = 'landscape';
 			}
-
+		
 			if(this.disabled) {
 				newScale = this.forceScale;
 			}
@@ -37760,9 +37760,9 @@ function GetJQueryPlugin(classname,obj) {
 					}
 				}
 			}
-
+	
 			var changed = 0;
-
+			
 			if(newScale !== this.scale) {
 				++changed;
 				for(var i = 0; i < this.classes.length; i++) {
@@ -37784,39 +37784,39 @@ function GetJQueryPlugin(classname,obj) {
 			}
 
 			this.scale = newScale;
-
+	
 			if(newOrientation !== this.orientation) {
 				++changed;
 				$('body').removeClass('portrait').removeClass('landscape');
 				$('body').addClass(newOrientation);
 				$('.DigitopiaInstance').trigger("DigitopiaOrientationChanged",newOrientation);
 			}
-
+	
 			this.orientation = newOrientation;
-
-			if(changed) {
+		
+			if(changed) { 
 				this.setHints();
 			}
 		}
 
 		this.setHints = function() {
 			var classes = '';
-
+			
 			if(this.orientation) {
 				if(classes) { classes += ' '; }
 				classes += this.orientation;
 			}
-
+	
 			if(this.scale) {
 				if(classes) { classes += ' '; }
 				classes += this.scale;
 			}
-
+	
 			if(classes !== this.getCookie('responsive')) {
 				this.setCookie('responsive',classes);
 			}
 		};
-
+		
 		this.getCookie = function(key) {
 			return $.cookie(key);
 		};
@@ -37862,11 +37862,11 @@ function GetJQueryPlugin(classname,obj) {
 (function($){
 	var digitopiaViewport = function(element, options){
 		this.element = $(element);
-
+		
 		var self = this;
 
 		this.element.css({'position':'relative','overflow':'hidden'});
-
+		
 		this.settings = $.extend({
 			crop: $(this.element).data('crop') ? $(this.element).data('crop') : false,
 			align: $(this.element).data('align') ? $(this.element).data('align') : 'center',
@@ -37874,10 +37874,10 @@ function GetJQueryPlugin(classname,obj) {
 			trimHeight: $(this.element).data('trim-height') ? $(this.element).data('trim-height') : false,
 			listenTo: $(this.element).data('listen-to') ? $(this.element).data('listen-to') : false,
 		}, options || {});
-
+		
 		this.align = this.settings.align? this.settings.align.split(',') : [];
 		this.height = this.element.height();
-
+		
 		this.elements = $(this.element).children();
 		for(var i = 0; i < this.elements.length; i++) {
 			$(this.elements[i]).css({
@@ -37897,7 +37897,7 @@ function GetJQueryPlugin(classname,obj) {
 					self.fitElements(scale);
 				}
 			});
-
+			
 			if(!this.settings.listenTo) {
 				this.element.on('DigitopiaDidResize.' + this.id, function (e) {
 					e.stopPropagation();
@@ -37915,21 +37915,21 @@ function GetJQueryPlugin(classname,obj) {
 					}
 				});
 			}
-
+			
 			this.fitElements();
 		};
-
+		
 		this.stop = function() {
-			this.element.off('DigitopiaScaleChanged.' + this.id);
+			this.element.off('DigitopiaScaleChanged.' + this.id); 
 			if(!this.settings.listenTo) {
-				this.element.off('DigitopiaDidResize.' + this.id);
+				this.element.off('DigitopiaDidResize.' + this.id); 
 			}
 			else {
 				var id = $(this.settings.listenTo).attr('id');
-				this.element.off('digitopiaContainerDidResize' + id + '.' + this.id);
+				this.element.off('digitopiaContainerDidResize' + id + '.' + this.id); 
 			}
 		};
-
+		
 		this.getAlign = function(find) {
 			this.align = this.settings.align? this.settings.align.split(',') : [];
 			for(var i=0; i < this.align.length; i++) {
@@ -37939,52 +37939,52 @@ function GetJQueryPlugin(classname,obj) {
 			}
 			return false;
 		}
-
-		this.fitElements = function () {
+	
+		this.fitElements = function () {	
 			var maxHeight = 0;
-			for(var i = 0; i < this.elements.length; i++) {
+			for(var i = 0; i < this.elements.length; i++) {	
 				var child = this.elements[i];
 
 				var width = $(child).data('width');
 				var height = $(child).data('height');
-
+	
 				var boxwidth = $(this.element).width();
-
+					
 				var boxheight = $(this.element).height();
 
 				if(this.settings.trimHeight) { boxheight = this.height }
-
+	
 				//console.log('width,height,boxwidth,boxheight',width,height,boxwidth,boxheight);
-
-				var imgRatio = (height / width);
-				var boxRatio = (boxheight / boxwidth);
+				
+				var imgRatio = (height / width); 
+				var boxRatio = (boxheight / boxwidth); 
 				var mult = 1;
-
+	
 				if(this.settings.crop) {
-					if(imgRatio<boxRatio) {
+					if(imgRatio<boxRatio) { 
 						mult = boxheight / height;
-					}
-					else {
+					} 
+					else { 
 						mult = boxwidth / width;
 					}
 				}
 				else {
-					if(imgRatio>boxRatio) {
+					if(imgRatio>boxRatio) { 
 						mult = boxheight / height;
-					}
-					else {
+					} 
+					else { 
 						mult = boxwidth / width;
 					}
 				}
-
+	
 				width = width * mult;
 				height = height * mult;
-
+			
 				if(!this.settings.blowup) {
 					if($(child).data('width') && width > $(child).data('width')) {
 						width = $(child).data('width');
 					}
-
+			
 					if($(child).data('height') && height > $(child).data('height')) {
 						height = $(child).data('height');
 					}
@@ -37994,22 +37994,22 @@ function GetJQueryPlugin(classname,obj) {
 					$(this.element).height(height);
 					boxheight = height;
 				}
-
+			
 				var top = (boxheight - height) / 2;
 				var left = (boxwidth - width) / 2;
-
+			
 				if(this.getAlign('top')) {
 					top = 0;
 				}
-
+	
 				if(this.getAlign('bottom')) {
 					top = boxheight - height;
 				}
-
+			
 				if(this.getAlign('left')) {
 					left = 0;
 				}
-
+	
 				if(this.getAlign('right')) {
 					left = boxwidth - width;
 				}
@@ -38020,8 +38020,8 @@ function GetJQueryPlugin(classname,obj) {
 					'width':width + 'px',
 					'height':height + 'px'
 				}
-
-
+				
+														
 				$(child).css(css);
 			}
 		};
@@ -38197,7 +38197,7 @@ function GetJQueryPlugin(classname,obj) {
 						if($(this).data('inViewPort')) {
 							$(this).data('inViewPort').fitElements();
 						}
-
+						
 						// next tick - do this after fitElements renders
 						var instance = this;
 						setTimeout(function () {
@@ -38482,24 +38482,24 @@ function GetJQueryPlugin(classname,obj) {
 				this.ajaxLayer();
 			}
 		};
-
+		
 		this.stop = function() {
 			if(!this.settings.noLazy) {
 				this.element.off('digitopiaLazyLoad.' + this.id);
 			}
 		};
-
+		
 		this.reload = function() {
 			this.loaded = false;
 			this.ajaxLayer(true);
 		};
-
+		
 		this.ajaxLayer = function() {
 			if(!this.loaded) {
 				this.loaded = true;
-
+			
 				var fromCache = undefined;
-
+				
 				if(this.settings.clientCache) {
 					var clientCacheKey = this.id;
 					if(this.settings.clientCacheKey) {
@@ -38548,7 +38548,7 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			});
 		};
-
+		
 		this.ready = function(response) {
 			this.element.removeClass('responsive-loading');
 			if(this.settings.inline) {
@@ -38587,7 +38587,7 @@ function GetJQueryPlugin(classname,obj) {
 					value = sessionStorage[key];
 				}
 			}
-
+	
 			if(value != undefined) {
 				value = JSON.parse(value);
 			}
@@ -38928,15 +38928,15 @@ function GetJQueryPlugin(classname,obj) {
 
 	function wiggler(elem,motion) {
 		this.element = $(elem);
-
+		
 		this.options = undefined;
-
+		
 		this.animation = motion;
 		this.pcnt = 0;
 		this.lastpcnt = 0;
 		var self = this;
 		this.cached = false;
-
+		
 		var paused = true;
 
 		var animationQueue = [];
@@ -38953,7 +38953,7 @@ function GetJQueryPlugin(classname,obj) {
 			this.cached = false;
 			this.prepare();
 		};
-
+		
 		this.start = function() {
 			this.prepare();
 
@@ -38967,14 +38967,14 @@ function GetJQueryPlugin(classname,obj) {
 								self.timer();
 							});
 						});
-					}
+					}		
 				}
 			});
 
 			$(window).blur(function() {
 				paused = true;
 			});
-
+						
 			this.element.on('play',function(e,options) {
 				if(e.target == this) {
 					self.options = options;
@@ -38988,27 +38988,27 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			});
 
-
+			
 			this.element.on('scrub',function(e, options) {
 				if(e.target == this) {
 					self.options = options;
 					self.pcnt = self.options.time / self.options.duration;
 					self.pcnt = Math.round(self.pcnt * 10000) / 10000;
-					if(self.pcnt != self.lastpcnt) {
+					if(self.pcnt != self.lastpcnt) {	
 						self.action();
 						self.lastpcnt = self.pcnt;
 					}
 				}
 			});
 		};
-
+		
 		this.stop = function() {
 			paused = true;
 			this.element.off('play');
 			this.element.off('pause');
 			this.element.off('scrub');
 		};
-
+		
 		this.resume = function() {
 			paused = false;
 			queueAnimation(function() {
@@ -39019,9 +39019,9 @@ function GetJQueryPlugin(classname,obj) {
 				queueAnimation(function() {
 					self.timer();
 				});
-			});
+			});			
 		};
-
+	
 		this.timer = function() {
 			if(!paused) {
 				var now = Date.now();
@@ -39033,15 +39033,15 @@ function GetJQueryPlugin(classname,obj) {
 				if(this.pcnt > 1) { this.pcnt = 1; }
 
 				this.pcnt = Math.round(this.pcnt * 10000) / 10000;
-
-				if(this.pcnt != this.lastpcnt) {
+			
+				if(this.pcnt != this.lastpcnt) {	
 					this.action();
 					this.lastpcnt = this.pcnt;
-
+				
 					//console.log(this.pcnt);
 				}
-
-				if(this.pcnt > 0 && this.pcnt < 1) {
+			
+				if(this.pcnt > 0 && this.pcnt < 1) {	
 					queueAnimation(function() {
 						self.timer();
 					});
@@ -39057,14 +39057,14 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			}
 		};
-
+	
 		this.action = function() {
 			//console.log('action ' + this.pcnt);
 			for(var q = 0; q < this.animation.quelist.length; q++) {
 				this.performQue(this.animation.quelist[q]);
 			}
 		};
-
+		
 		this.prepare = function() {
 			if(!this.cached) {
 				this.cached = true;
@@ -39081,28 +39081,28 @@ function GetJQueryPlugin(classname,obj) {
 									que.keyframes[i].cached[property].vals.push(+n);
 									return '{?}';
 								});
-
-								que.keyframes[i].cached[property].format = format;
-							}
+					
+								que.keyframes[i].cached[property].format = format;	
+							}	
 						}
 					}
 				}
 			}
 		};
-
+		
 		this.doTrigger = function(element,trigger) {
 			if(!paused) {
 				if(trigger.css) {
 					$(element).css(trigger.css);
 				}
-
+			
 				if(trigger.callback) {
 					trigger.callback.call();
 				}
 			}
 		};
-
-
+				
+	
 		this.performQue = function(que) {
 			if(que.triggers && que.triggers.length) {
 				for(var i = 0; i < que.triggers.length; i++) {
@@ -39127,7 +39127,7 @@ function GetJQueryPlugin(classname,obj) {
 					}
 				}
 			};
-
+			
 			if(que.keyframes && que.keyframes.length) {
 				var start = que.keyframes[0].percent / 100;
 				var end = que.keyframes[que.keyframes.length - 1].percent / 100;
@@ -39135,7 +39135,7 @@ function GetJQueryPlugin(classname,obj) {
 				var easing = que.easing;
 				var target_frame = undefined;
 				var origin_frame = undefined;
-
+	
 				if(this.pcnt >= start && this.pcnt <= end) {
 					if(self.options.direction == -1) {
 						for(var i = que.keyframes.length -1; i >= 1; i--) {
@@ -39154,44 +39154,44 @@ function GetJQueryPlugin(classname,obj) {
 							}
 						}
 					}
-
-
+			
+				
 					if(que.keyframes[target_frame].easing) {
 						easing = que.keyframes[target_frame].easing;
 					}
-
+				
 					var qpcnt = ((this.pcnt * 100) - que.keyframes[origin_frame].percent) / (que.keyframes[target_frame].percent - que.keyframes[origin_frame].percent);
 					qpcnt = Math.round(qpcnt * 100) / 100;
-
+				
 					//console.log(this.pcnt, origin_frame, target_frame, qpcnt );
-
+							
 					var newCSS = {};
 
 					var regexNumeric = /[\-+]?[\d]*\.?[\d]+/g;
-
+			
 					for (var property in que.keyframes[origin_frame].css) {
 
 						var format;
-
+					
 						var regexPlaceholder = /\{\?\}/;
-
+					
 						var result = que.keyframes[target_frame].cached[property].format;
-
+					
 						for(var j = 0; j < que.keyframes[target_frame].cached[property].vals.length; j++) {
-
+					
 							var origin = parseFloat(que.keyframes[origin_frame].cached[property].vals[j]);
 							var target = que.keyframes[target_frame].cached[property].vals[j];
 							var delta  = target - origin;
 
 							var value = undefined;
-
+						
 							if(easing) {
 								value = $.easing[easing](qpcnt, qpcnt * duration, origin, delta, duration);
 							}
 							else {
 								value = origin + (delta * qpcnt);
 							}
-
+							
 							result = result.replace(regexPlaceholder, value);
 						}
 
@@ -39203,11 +39203,11 @@ function GetJQueryPlugin(classname,obj) {
 							element.css(css)
 						}
 					}($(que.element),newCSS);
-
-					queueAnimation(frame);
+							
+					queueAnimation(frame);	
 
 				}
-
+			
 				if(que.frame_in_progress != undefined && target_frame != que.frame_in_progress) { // set final frame state if needed
 					//console.log('final',que.keyframes[que.frame_in_progress]);
 					var newCSS = que.keyframes[que.frame_in_progress].css;
@@ -39216,7 +39216,7 @@ function GetJQueryPlugin(classname,obj) {
 						return function() {
 							element.css(css)
 						}
-					}($(que.element),newCSS);
+					}($(que.element),newCSS);		
 					queueAnimation(frame);
 				}
 
@@ -41726,7 +41726,7 @@ function GetJQueryPlugin(classname,obj) {
 				}
 			});
 
-			var method = self.settings.mode === 'edit' ? 'patch' : 'post';
+			var method = self.settings.mode === 'edit' ? 'put' : 'post';
 
 			flashAjaxStatus('info', 'saving...');
 
