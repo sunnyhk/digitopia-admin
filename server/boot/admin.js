@@ -536,10 +536,10 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 			}
 		], function (err, results) {
 			if (err) {
-				res.status(500).send('error ' + err);
+				return res.status(500).send('error ' + err);
 			}
 			if (id !== -1 && !theInstance) {
-				res.status(404).send('not found');
+				return res.status(404).send('not found');
 			}
 
 			var parents = [];
