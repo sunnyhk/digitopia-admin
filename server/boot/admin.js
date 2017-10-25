@@ -470,7 +470,12 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 
 		var modelPlural = req.app.models[model].pluralModelName;
 
-		var endpoint = req.protocol + '://' + req.get('host') + '/api/' + modelPlural;
+		var apiMountPoint = options.endpoint;
+		if (!apiMountPoint) {
+			apiMountPoint = req.protocol + '://' + req.get('host') + '/api/';
+		}
+
+		var endpoint = apiMountPoint + modelPlural;
 		if (id !== -1) {
 			endpoint += '/' + id;
 		}
