@@ -1,6 +1,6 @@
 var loopback = require('loopback');
 var async = require('async');
-var jade = require('jade');
+var pug = require('pug');
 var path = require('path');
 var moment = require('moment');
 var extend = require('util')._extend;
@@ -269,7 +269,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 		locals.adminOptions = options;
 
 		var templatePath = path.join(__dirname, '../views/', template);
-		var fn = jade.compileFile(templatePath, {
+		var fn = pug.compileFile(templatePath, {
 			'pretty': true,
 			'filename': templatePath
 		});
@@ -301,7 +301,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	// need login
 	router.get('/admin/need-login', function (req, res, next) {
 
-		render('admin/views/need-login.jade', {}, function (err, html) {
+		render('admin/views/need-login.pug', {}, function (err, html) {
 			res.send(html);
 		});
 	});
@@ -340,7 +340,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 						done(err, user);
 					});
 				}, function (err, users) {
-					render('admin/admin-users.jade', {
+					render('admin/admin-users.pug', {
 						'currentUser': loopbackContext.get('currentUser'),
 						'isSuperUser': loopbackContext.get('isSuperUser'),
 						'users': users
@@ -356,7 +356,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
 
-		render('admin/dash.jade', {
+		render('admin/dash.pug', {
 			'currentUser': loopbackContext.get('currentUser'),
 			'isSuperUser': loopbackContext.get('isSuperUser')
 		}, function (err, html) {
@@ -423,7 +423,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 					});
 				}
 				else {
-					render('admin/views/index.jade', {
+					render('admin/views/index.pug', {
 						'currentUser': loopbackContext.get('currentUser'),
 						'isSuperUser': loopbackContext.get('isSuperUser'),
 						'model': model,
@@ -628,7 +628,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 				theInstance = {};
 			}
 
-			render('admin/views/instance.jade', {
+			render('admin/views/instance.pug', {
 				'currentUser': loopbackContext.get('currentUser'),
 				'isSuperUser': loopbackContext.get('isSuperUser'),
 				'isUserModel': model === userModelName,
