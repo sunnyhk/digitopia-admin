@@ -558,13 +558,14 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 					var related = theInstance ? theInstance[relation.name]() : [];
 					var relatedModel = relation.polymorphic ? theInstance[relation.polymorphic.discriminator] : relation.modelTo;
 					var relatedSchema = getModelInfo(relatedModel);
+					var pluralModelName = relatedSchema.plural ? relatedSchema.plural : (relatedModel + 's')
 					parents.push({
 						'name': relation.name,
 						'model': relatedModel,
 						'type': relation.type,
 						'foreignKey': relation.keyFrom,
 						'lookupProperty': relatedSchema.admin.defaultProperty,
-						'lookupEndpoint': '/api/' + relatedSchema.plural + '/',
+						'lookupEndpoint': '/api/' + pluralModelName + '/',
 						'url': related ? '/admin/views/' + relatedModel + '/' + related.id + '/view' : null,
 						'description': related ? related[relatedSchema.admin.defaultProperty] : null
 					});
