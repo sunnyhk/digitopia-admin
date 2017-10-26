@@ -564,7 +564,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 						'type': relation.type,
 						'foreignKey': relation.keyFrom,
 						'lookupProperty': relatedSchema.admin.defaultProperty,
-						'lookupEndpoint': '/api/' + relatedModel + 's/',
+						'lookupEndpoint': '/api/' + relatedSchema.plural + '/',
 						'url': related ? '/admin/views/' + relatedModel + '/' + related.id + '/view' : null,
 						'description': related ? related[relatedSchema.admin.defaultProperty] : null
 					});
