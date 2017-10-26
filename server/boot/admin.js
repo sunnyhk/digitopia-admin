@@ -466,6 +466,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 
 		var childRelations = [];
 		var parentRelations = [];
+		var hiddenRelations = []; // NEW, store relation info that invisible to users
 		var includes = [];
 
 		var modelPlural = req.app.models[model].pluralModelName;
@@ -486,6 +487,16 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 					var rel = schema.relations[relation];
 					childRelations.push(rel);
 					includes.push(relation);
+					// BEGIN look for the model defined by modelThrough
+					if (rel.modelThrough) {
+						for (var relationThru in schema.relations) {
+							if (schema.relations[relationThru].modelTo === rel.modelThrough) {
+								var relThru = schema.relations[relationThru]
+								hiddenRelations.push(relThru); // store definitions
+								includes.push(relationThru); // store row records
+							}
+						}
+					} // END
 				}
 
 				if (schema.relations[relation].type === 'belongsTo') {
@@ -622,7 +633,23 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 						}
 
 						if (relation.modelThrough) {
-							item.url = '/admin/views/' + relation.modelThrough + '/' + child.id + '/view'
+							// Attempt to find the through model via hiddenRelations
+							var myChild = child // default to original code
+							for (var m in hiddenRelations) {
+								var hiddenRelation = hiddenRelations[m]
+								if (hiddenRelation.modelTo == relation.modelThrough) {
+									var hiddenRelated = theInstance[hiddenRelation.name]()
+									for (var n = 0; n < hiddenRelated.length; n++) {
+										var hiddenChild = hiddenRelated[n];
+										if (hiddenChild[relation.keyThrough] == child.id) {
+											myChild = hiddenChild
+											break;
+										}
+									}
+									break
+								}
+							}
+							item.url = '/admin/views/' + relation.modelThrough + '/' + myChild.id + '/view'
 						}
 
 						children[relation.name].children.push(item);
