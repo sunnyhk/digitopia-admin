@@ -57,7 +57,9 @@ block content
 									- var notes = null
 									if property == 'note'
 										- notes = JSON.parse(instance[property])
-										= "Note Found"
+										h2 "Note Found"
+									else
+										h2 "Other Found"
 									.form-group
 										label.col-sm-2.control-label
 											= property
