@@ -98,7 +98,11 @@ block content
 											if mode === 'view'
 												.input-margins
 													if dataType === 'object' && val
-														pre= val
+														- if (notes)
+															each note in notes
+																= note
+														- else
+															pre= val
 													else
 														- if (notes)
 															each note in notes
