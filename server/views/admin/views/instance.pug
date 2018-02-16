@@ -54,7 +54,10 @@ block content
 
 								for property in properties
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
-
+									- var notes = null
+									- if (property == "note") {
+									- 	notes = JSON.parse(instance[property])
+									- }
 									.form-group
 										label.col-sm-2.control-label
 											= property
@@ -97,7 +100,11 @@ block content
 													if dataType === 'object' && val
 														pre= val
 													else
-														= val
+														- if (notes)
+															each note in notes
+																= note
+														- else
+															= val
 											else
 												if options
 													for option in options
