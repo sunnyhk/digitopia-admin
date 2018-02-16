@@ -57,9 +57,6 @@ block content
 									- var notes = null
 									if property == 'note'
 										- notes = JSON.parse(instance[property])
-										h2 "Note Found"
-									else
-										h2 "Other Found"
 									.form-group
 										label.col-sm-2.control-label
 											= property
@@ -102,13 +99,13 @@ block content
 													if dataType === 'object' && val
 														- if (notes)
 															each note in notes
-																= note
+																img.image(src= note)
 														- else
 															pre= val
 													else
 														- if (notes)
 															each note in notes
-																= note
+																img.image(src= note)
 														- else
 															= val
 											else
