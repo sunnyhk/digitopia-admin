@@ -55,9 +55,9 @@ block content
 								for property in properties
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
 									- var notes = null
-									- if (property == "note") {
-									- 	notes = JSON.parse(instance[property])
-									- }
+									if property == 'note'
+										- notes = JSON.parse(instance[property])
+										= "Note Found"
 									.form-group
 										label.col-sm-2.control-label
 											= property
