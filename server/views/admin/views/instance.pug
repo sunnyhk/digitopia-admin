@@ -187,9 +187,10 @@ block content
 									.col-sm-2
 									.col-sm-10
 										- var verifiedEndpoint = endpoint + "/verified"
-										form.form.form-horizontal(method="POST" action= verifiedEndpoint data-submitter=".verified-button")
-											.form-group
-												button.btn.btn-primary.verified-button(data-id= instance.id) Verified
+//										form.form.form-horizontal(method="POST" action= verifiedEndpoint data-submitter=".verified-button")
+//											.form-group
+//												button.btn.btn-primary.verified-button(data-id= instance.id) Verified
+										button.btn.btn-primary(type='button' value= "Verified" onclick= 'ajax_post("'+verifiedEndpoint+'", "")')
 									.col-sm-2
 									.col-sm-10
 										- var failEndpoint = endpoint + "/failed"
@@ -202,4 +203,4 @@ block content
 										- var confirmedEndpoint = endpoint + "/completedPayment"
 										form.form.form-horizontal(method="POST" action= confirmedEndpoint data-submitter=".confirmed-button")
 											.form-group
-												button.btn.btn-primary.confirmed-button(data-id= instance.id) Confirmed
+												button.btn.btn-primary.confirmed-button(data-id= instance.id) Bank-in confirmed
