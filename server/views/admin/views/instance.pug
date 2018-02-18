@@ -178,3 +178,26 @@ block content
 										.col-sm-2
 										.col-sm-10
 											button.btn.btn-primary.save-button(data-id= instance.id) Save
+			.row
+				.col-xs-12
+					.panel.panel-default
+						.panel-body
+							if mode == 'view'
+								if model == 'memberWalletTransaction'
+									.form-group
+										.col-sm-2
+										.col-sm-10
+											- var verified-endpoint = endpoint + "/verified"
+											form.form.form-horizontal(method="POST" action= verified-endpoint data-submitter=".verified-button")
+												button.btn.btn-primary.verified-button(data-id= instance.id) Verified
+										.col-sm-10
+											- var fail-endpoint = endpoint + "/failed"
+											form.form.form-horizontal(method="POST" action= fail-endpoint data-submitter=".fail-button")
+												button.btn.btn-primary.fail-button(data-id= instance.id) Fail
+								else if model == 'requestOrder'
+									.form-group
+										.col-sm-2
+										.col-sm-10
+											- var confiemd-endpoint = endpoint + "/completedPayment"
+											form.form.form-horizontal(method="POST" action= confirmed-endpoint data-submitter=".confirmed-button")
+												button.btn.btn-primary.confirmed-button(data-id= instance.id) Confirmed
