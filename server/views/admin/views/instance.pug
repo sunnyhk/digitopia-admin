@@ -185,15 +185,18 @@ block content
 							if mode == 'view'
 								if model == 'memberWalletTransaction'
 									.col-sm-2
-									.col-sm-10
-										- var verifiedEndpoint = endpoint + "/verified"
-										button.btn.btn-primary(type='button' value= "Verified" onclick= 'ajax_post("'+verifiedEndpoint+'", "")') Verified
-									.col-sm-2
-									.col-sm-10
-										- var failEndpoint = endpoint + "/failed"
-										button.btn.btn-primary(type='button' value= "Fail" onclick= 'ajax_post("'+failEndpoint+'", "")') Fail
+										Action
+									.row
+										.col-sm-1
+											- var verifiedEndpoint = endpoint + "/verified"
+											button.btn.btn-primary(type='button' value= "Verified" onclick= 'ajax_post("'+verifiedEndpoint+'", "")') Verified
+										.col-sm-1
+											- var failEndpoint = endpoint + "/failed"
+											button.btn.btn-danger(type='button' value= "Fail" onclick= 'ajax_post("'+failEndpoint+'", "")') Fail
 								else if model == 'requestOrder'
 									.col-sm-2
-									.col-sm-10
-										- var confirmedEndpoint = endpoint + "/completedPayment"
-										button.btn.btn-primary(type='button' value= "Bank-in Verified" onclick= 'ajax_post("'+confirmedEndpoint+'", "bank")') Bank-in Verified
+										Action
+									.row
+										.col-sm-1
+											- var confirmedEndpoint = endpoint + "/completedPayment"
+											button.btn.btn-primary(type='button' value= "Bank-in Verified" onclick= 'ajax_post("'+confirmedEndpoint+'", {"paymentMethod":"bank"})') Bank-in Verified
