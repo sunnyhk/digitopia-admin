@@ -8,5 +8,6 @@ var ajax_post = function(url, data) {
 		alert("Failed");
 	})
 	.always(function() {
+		location.reload();
 	});
 };
