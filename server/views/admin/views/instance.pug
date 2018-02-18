@@ -184,20 +184,22 @@ block content
 						.panel-body
 							if mode == 'view'
 								if model == 'memberWalletTransaction'
-									.form-group
-										.col-sm-2
-										.col-sm-10
-											- var verified-endpoint = endpoint + "/verified"
-											form.form.form-horizontal(method="POST" action= verified-endpoint data-submitter=".verified-button")
+									.col-sm-2
+									.col-sm-10
+										- var verifiedEndpoint = endpoint + "/verified"
+										form.form.form-horizontal(method="POST" action= verifiedEndpoint data-submitter=".verified-button")
+											.form-group
 												button.btn.btn-primary.verified-button(data-id= instance.id) Verified
-										.col-sm-10
-											- var fail-endpoint = endpoint + "/failed"
-											form.form.form-horizontal(method="POST" action= fail-endpoint data-submitter=".fail-button")
-												button.btn.btn-primary.fail-button(data-id= instance.id) Fail
+									.col-sm-2
+									.col-sm-10
+										- var failEndpoint = endpoint + "/failed"
+										form.form.form-horizontal(method="POST" action= failEndpoint data-submitter=".fail-button")
+											.form-group
+												button.btn.btn-danger.fail-button(data-id= instance.id) Fail
 								else if model == 'requestOrder'
-									.form-group
-										.col-sm-2
-										.col-sm-10
-											- var confiemd-endpoint = endpoint + "/completedPayment"
-											form.form.form-horizontal(method="POST" action= confirmed-endpoint data-submitter=".confirmed-button")
+									.col-sm-2
+									.col-sm-10
+										- var confirmedEndpoint = endpoint + "/completedPayment"
+										form.form.form-horizontal(method="POST" action= confirmedEndpoint data-submitter=".confirmed-button")
+											.form-group
 												button.btn.btn-primary.confirmed-button(data-id= instance.id) Confirmed
