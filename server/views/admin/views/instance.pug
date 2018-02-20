@@ -198,5 +198,8 @@ block content
 										Action
 									.row
 										.col-sm-1
-											- var confirmedEndpoint = endpoint + "/completedPayment"
-											button.btn.btn-primary(type='button' value= "Bank-in Verified" onclick= 'ajax_post("'+confirmedEndpoint+'", {"paymentMethod":"bank"})') Bank-in Verified
+											- var confirmedOrderEndpoint = endpoint + "/completedPayment"
+											button.btn.btn-primary(type='button' value= "Bank-in Verified" onclick= 'ajax_post("'+confirmedOrderEndpoint+'", {"paymentMethod":"bank"})') Bank-in Verified
+										.col-sm-1
+											- var cancelOrderEndpoint = endpoint + "/cancelByCS"
+											button.btn.btn-danger(type='button' value= "Cancel" onclick= 'ajax_post("'+cancelOrderEndpoint+'", "")') Cancel
