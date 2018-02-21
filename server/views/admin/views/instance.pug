@@ -55,7 +55,7 @@ block content
 								for property in properties
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
 									- var notes = null
-									if property == 'note'
+									if property == 'note' && instance[property]
 										- notes = JSON.parse(instance[property])
 									.form-group
 										label.col-sm-2.control-label
@@ -197,7 +197,7 @@ block content
 									.col-sm-2
 										Action
 									.row
-										.col-sm-1
+										.col-sm-2
 											- var confirmedOrderEndpoint = endpoint + "/completedPayment"
 											button.btn.btn-primary(type='button' value= "Bank-in Verified" onclick= 'ajax_post("'+confirmedOrderEndpoint+'", {"paymentMethod":"bank"})') Bank-in Verified
 										.col-sm-1
