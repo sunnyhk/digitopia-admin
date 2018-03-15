@@ -97,17 +97,15 @@ block content
 											if mode === 'view'
 												.input-margins
 													if dataType === 'object' && val
-														- if (notes)
-															each note in notes
-																- if (note.includes("filestackcontent.com"))
-																	img.image(src= note)
+														- if (notes.images)
+															each note in notes.images
+																img.image(src= note)
 														- else
 															pre= val
 													else
-														- if (notes)
-															each note in notes
-																- if (note.includes("filestackcontent.com"))
-																	img.image(src= note)
+														- if (notes.images)
+															each note in notes.images
+																img.image(src= note)
 														- else
 															= val
 											else
