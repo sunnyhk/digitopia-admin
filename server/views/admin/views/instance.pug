@@ -97,13 +97,13 @@ block content
 											if mode === 'view'
 												.input-margins
 													if dataType === 'object' && val
-														- if (note && notes.images)
+														- if (notes && notes.images)
 															each note in notes.images
 																img.image(src= note)
 														- else
 															pre= val
 													else
-														- if (note && notes.images)
+														- if (notes && notes.images)
 															each note in notes.images
 																img.image(src= note)
 														- else
