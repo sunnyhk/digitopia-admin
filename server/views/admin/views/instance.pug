@@ -56,7 +56,7 @@ block content
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
 									- var notes = null
 									if property == 'note' && instance[property]
-										- notes = JSON.parse(instance[property])
+										- notes = try { JSON.parse(instance[property]) } catch { instance[property] }
 									.form-group
 										label.col-sm-2.control-label
 											= property
@@ -99,13 +99,15 @@ block content
 													if dataType === 'object' && val
 														- if (notes)
 															each note in notes
-																img.image(src= note)
+																- if (note.includes("filestackcontent.com"))
+																	img.image(src= note)
 														- else
 															pre= val
 													else
 														- if (notes)
 															each note in notes
-																img.image(src= note)
+																- if (note.includes("filestackcontent.com"))
+																	img.image(src= note)
 														- else
 															= val
 											else
