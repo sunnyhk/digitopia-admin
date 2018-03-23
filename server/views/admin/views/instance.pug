@@ -56,7 +56,12 @@ block content
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
 									- var notes = null
 									if property == 'note' && instance[property]
-										- notes = JSON.parse(instance[property])
+										script.
+											try {
+												notes = JSON.parse(instance[property])
+											} catch(e) {
+												notes = null
+											}
 									.form-group
 										label.col-sm-2.control-label
 											= property
