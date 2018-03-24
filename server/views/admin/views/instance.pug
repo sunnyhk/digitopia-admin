@@ -56,7 +56,7 @@ block content
 									- var type = schema.properties[property].admin.inputType.toLowerCase()
 									- var notes = null
 									if property == 'note' && instance[property]
-										script.
+										-
 											try {
 												notes = JSON.parse(instance[property])
 											} catch(e) {
