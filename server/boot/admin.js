@@ -28,8 +28,10 @@ var getCurrentUser = function getCurrentUser(req, cb) {
 			}
 			cb(err, user);
 		});
+	} else {
+		console.log("getCurrentUser: No accessToken or userId");
+		cb(null, null);
 	}
-	cb(null, null);
 };
 
 module.exports.setUpRoleToggleAPI = function setUpRoleToggleAPI(myUserModel) {
