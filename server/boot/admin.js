@@ -365,14 +365,23 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
 		console.log("Router: /admin");
-		getCurrentUser(req, function(err, user) {
-			if (typeof user !== "undefined" && user != null) {
-				console.log("Current user: " + user.firstName);
-			} else {
-				console.log("Cannot find user");
-			}
+		async.series([
+				function(callback) {
+					getCurrentUser(req, function(err, user) {
+						if (typeof user !== "undefined" && user != null) {
+							console.log("Current user: " + user.firstName);
+						} else {
+							console.log("Cannot find user");
+						}
+						callback(null, user);
+					});
+				}
+		],
+		// result callback
+		function(err, results) {
+			// results is now equal to [user]
 			render('admin/dash.pug', {
-				'currentUser': user,
+				'currentUser': results[0],
 				'isSuperUser': loopbackContext.get('isSuperUser')
 			}, function (err, html) {
 				res.send(html);
