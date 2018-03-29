@@ -309,6 +309,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 
 	// need login
 	router.get('/admin/need-login', function (req, res, next) {
+		console.log("Router: /admin/need-login");
 
 		render('admin/views/need-login.pug', {
 			'currentUser': null,
