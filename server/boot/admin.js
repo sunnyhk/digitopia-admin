@@ -22,6 +22,9 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 
 var getCurrentUser = function getCurrentUser(req, cb) {
 	req.app.models.Member.findById(req.accessToken.userId, function (err, user) {
+		if (typeof user !== "undefined" && user != null) {
+			console.log("Got user: " + user.firstName);
+		}
 		cb(err, user);
 	});
 };
@@ -362,6 +365,9 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
 		getCurrentUser(req, function(err, user) {
+			if (typeof user !== "undefined" && user != null) {
+				console.log("Current user: " + user.firstName);
+			}
 			render('admin/dash.pug', {
 				'currentUser': user,
 				'isSuperUser': loopbackContext.get('isSuperUser')
