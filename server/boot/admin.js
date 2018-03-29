@@ -367,6 +367,8 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 		getCurrentUser(req, function(err, user) {
 			if (typeof user !== "undefined" && user != null) {
 				console.log("Current user: " + user.firstName);
+			} else {
+				console.log("Cannot find user");
 			}
 			render('admin/dash.pug', {
 				'currentUser': user,
@@ -436,21 +438,28 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 					});
 				}
 				else {
-					render('admin/views/index.pug', {
-						'currentUser': loopbackContext.get('currentUser'),
-						'isSuperUser': loopbackContext.get('isSuperUser'),
-						'model': model,
-						'schema': schema,
-						'instances': instances,
-						'count': count,
-						'pages': Math.ceil(count / 30),
-						'page': p,
-						'next': Math.ceil(count / 30) < p ? p + 1 : p,
-						'prev': p > 1 ? p - 1 : 1,
-						'q': query,
-						'uri': 'index?q=' + query + '&property=' + req.query.property
-					}, function (err, html) {
-						res.send(html);
+					getCurrentUser(req, function(err, user) {
+						if (typeof user !== "undefined" && user != null) {
+							console.log("Current user: " + user.firstName);
+						} else {
+							console.log("Cannot find user");
+						}
+						render('admin/views/index.pug', {
+							'currentUser': user,
+							'isSuperUser': loopbackContext.get('isSuperUser'),
+							'model': model,
+							'schema': schema,
+							'instances': instances,
+							'count': count,
+							'pages': Math.ceil(count / 30),
+							'page': p,
+							'next': Math.ceil(count / 30) < p ? p + 1 : p,
+							'prev': p > 1 ? p - 1 : 1,
+							'q': query,
+							'uri': 'index?q=' + query + '&property=' + req.query.property
+						}, function (err, html) {
+							res.send(html);
+						});
 					});
 				}
 			});
@@ -674,24 +683,31 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 				theInstance = {};
 			}
 
-			render('admin/views/instance.pug', {
-				'currentUser': loopbackContext.get('currentUser'),
-				'isSuperUser': loopbackContext.get('isSuperUser'),
-				'isUserModel': model === userModelName,
-				'instanceIsAdminUser': isAdminUser,
-				'instanceIsSuperUser': isSuperUser,
-				'mode': mode,
-				'model': model,
-				'schema': schema,
-				'instance': theInstance,
-				'childRelations': childRelations,
-				'parentRelations': parentRelations,
-				'endpoint': endpoint,
-				'parents': parents,
-				'children': children,
-				'query': req.query
-			}, function (err, html) {
-				res.send(html);
+			getCurrentUser(req, function(err, user) {
+				if (typeof user !== "undefined" && user != null) {
+					console.log("Current user: " + user.firstName);
+				} else {
+					console.log("Cannot find user");
+				}
+				render('admin/views/instance.pug', {
+					'currentUser': user,
+					'isSuperUser': loopbackContext.get('isSuperUser'),
+					'isUserModel': model === userModelName,
+					'instanceIsAdminUser': isAdminUser,
+					'instanceIsSuperUser': isSuperUser,
+					'mode': mode,
+					'model': model,
+					'schema': schema,
+					'instance': theInstance,
+					'childRelations': childRelations,
+					'parentRelations': parentRelations,
+					'endpoint': endpoint,
+					'parents': parents,
+					'children': children,
+					'query': req.query
+				}, function (err, html) {
+					res.send(html);
+				});
 			});
 		});
 	}
