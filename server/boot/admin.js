@@ -23,7 +23,7 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 var getCurrentUser = function getCurrentUser(req, cb) {
 	req.app.models.Member.findById(req.accessToken.userId, function (err, user) {
 		cb(err, user);
-	};
+	});
 };
 
 module.exports.setUpRoleToggleAPI = function setUpRoleToggleAPI(myUserModel) {
