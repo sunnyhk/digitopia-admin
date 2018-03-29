@@ -364,6 +364,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	// dashboard
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
+		console.log("Router: /admin");
 		getCurrentUser(req, function(err, user) {
 			if (typeof user !== "undefined" && user != null) {
 				console.log("Current user: " + user.firstName);
@@ -439,6 +440,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 				}
 				else {
 					getCurrentUser(req, function(err, user) {
+						console.log("Router: /admin/views");
 						if (typeof user !== "undefined" && user != null) {
 							console.log("Current user: " + user.firstName);
 						} else {
@@ -684,6 +686,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 			}
 
 			getCurrentUser(req, function(err, user) {
+				console.log("Router: /admin/views/instance");
 				if (typeof user !== "undefined" && user != null) {
 					console.log("Current user: " + user.firstName);
 				} else {
