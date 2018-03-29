@@ -310,7 +310,10 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	// need login
 	router.get('/admin/need-login', function (req, res, next) {
 
-		render('admin/views/need-login.pug', {}, function (err, html) {
+		render('admin/views/need-login.pug', {
+			'currentUser': null,
+			'isSuperUser': null,
+		}, function (err, html) {
 			res.send(html);
 		});
 	});
@@ -365,23 +368,14 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
 		console.log("Router: /admin");
-		async.series([
-				function(callback) {
-					getCurrentUser(req, function(err, user) {
-						if (typeof user !== "undefined" && user != null) {
-							console.log("Current user: " + user.firstName);
-						} else {
-							console.log("Cannot find user");
-						}
-						callback(null, user);
-					});
-				}
-		],
-		// result callback
-		function(err, results) {
-			// results is now equal to [user]
+		getCurrentUser(req, function(err, user) {
+			if (typeof user !== "undefined" && user != null) {
+				console.log("Current user: " + user.firstName);
+			} else {
+				console.log("Cannot find user");
+			}
 			render('admin/dash.pug', {
-				'currentUser': results[0],
+				'currentUser': user,
 				'isSuperUser': loopbackContext.get('isSuperUser')
 			}, function (err, html) {
 				res.send(html);
