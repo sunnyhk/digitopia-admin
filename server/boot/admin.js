@@ -20,6 +20,12 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 	};
 };
 
+var getCurrentUser = function getCurrentUser(req, cb) {
+	req.app.models.Member.findById(req.accessToken.userId, function (err, user) {
+		cb(err, user);
+	};
+};
+
 module.exports.setUpRoleToggleAPI = function setUpRoleToggleAPI(myUserModel) {
 
 	myUserModel.toggleadmin = function (id, ctx, done) {
@@ -355,12 +361,13 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 	// dashboard
 	router.get('/admin', userAuth, function (req, res, next) {
 		var loopbackContext = req.getCurrentContext();
-
-		render('admin/dash.pug', {
-			'currentUser': loopbackContext.get('currentUser'),
-			'isSuperUser': loopbackContext.get('isSuperUser')
-		}, function (err, html) {
-			res.send(html);
+		getCurrentUser(req, function(err, user) {
+			render('admin/dash.pug', {
+				'currentUser': user,
+				'isSuperUser': loopbackContext.get('isSuperUser')
+			}, function (err, html) {
+				res.send(html);
+			});
 		});
 	});
 
