@@ -21,12 +21,15 @@ var adminGetUploadForProperty = function adminGetUploadForProperty(prop, uploads
 };
 
 var getCurrentUser = function getCurrentUser(req, cb) {
-	req.app.models.Member.findById(req.accessToken.userId, function (err, user) {
-		if (typeof user !== "undefined" && user != null) {
-			console.log("Got user: " + user.firstName);
-		}
-		cb(err, user);
-	});
+	if (req.accessToken && req.accessToken.userId) {
+		req.app.models.Member.findById(req.accessToken.userId, function (err, user) {
+			if (typeof user !== "undefined" && user != null) {
+				console.log("Got user: " + user.firstName);
+			}
+			cb(err, user);
+		});
+	}
+	cb(null, null);
 };
 
 module.exports.setUpRoleToggleAPI = function setUpRoleToggleAPI(myUserModel) {
