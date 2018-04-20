@@ -198,6 +198,13 @@ block content
 										.col-sm-1
 											- var failEndpoint = endpoint + "/failed"
 											button.btn.btn-danger(type='button' value= "Fail" onclick= 'ajax_post("'+failEndpoint+'", "")') Fail
+								else if model == 'member'
+									.col-sm-2
+										Action
+									.row
+										.col-sm-4
+											- var confirmedOrderEndpoint = endpoint + "/resend-email-verification"
+											button.btn.btn-primary(type='button' value= "Resend Email Verification" onclick= 'ajax_post("'+confirmedOrderEndpoint+'", "")') Resend Email Verification
 								else if model == 'requestOrder'
 									.col-sm-2
 										Action
